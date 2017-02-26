@@ -1,0 +1,54 @@
+// {type:usecase}
+// {generate:true}
+// {direction:leftToRight}
+
+//**************************************
+// Actors
+//**************************************
+[Student]
+[Teacher]
+[Administrator]
+
+//***************************************
+// Cases
+//***************************************
+(Student)-(Login)
+(Teacher)-(Login)
+(Administrator)-(Login)
+
+(Student)-(Enroll in a Class)
+(Student)-(View Class Schedule)
+(Student)-(Check Grades)
+(Student)-(View Class Files)
+
+(Administrator)-(Manage Database)
+(Administrator)-(Manage Class)
+
+(Manage Database)>(Add Class)
+(Manage Database)>(Add Teacher)
+(Manage Database)>(Add Student)
+(Manage Database)>(Update Class)
+(Manage Database)>(Update Teacher)
+(Manage Database)>(Update Student)
+(Manage Database)>(Remove Class)
+(Manage Database)>(Remove Teacher)
+(Manage Database)>(Remove Student)
+
+(Teacher)-(Manage Class)
+(Teacher)-(View Class Schedule)
+(Teacher)-(Upload Class Files)
+(Teacher)-(Delete Class Files)
+(Teacher)-(View Class Files)
+
+(Manage Class)>(View Roster)
+(Manage Class)>(View Grades)
+(Manage Class)>(View Assignments)
+(Manage Class)>(View Attendance)
+(Manage Class)>(Add Grades)
+(Manage Class)>(Add Assignments)
+(Manage Class)>(Add Class Attendance)
+(Manage Class)>(Remove Grades)
+(Manage Class)>(Remove Assignments)
+(Manage Class)>(Update Grades)
+(Manage Class)>(Update Assignments)
+(Manage Class)>(Update Class Attendance)
