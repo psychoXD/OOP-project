@@ -20,6 +20,7 @@
 (Student)-(View Class Schedule)
 (Student)-(Check Grades)
 (Student)-(View Class Files)
+(Student)-(Submit Assignments)
 
 (Administrator)-(Manage Database)
 (Administrator)-(Manage Class)
