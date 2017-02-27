@@ -1,0 +1,25 @@
+// {type:class}
+// {generate:true}
+// {direction:topDown}
+
+//************************************************
+// Classes w/ Attributes
+//************************************************
+
+[Users|username:String;password:String;name:String; phoneNumber:String; address:String; userID:integer| ]
+[Administrator]
+[Student|gpa:double;]
+[Teacher]
+[Faculty]
+
+
+//************************************************
+// Relationships
+//************************************************
+
+[Users]^[Faculty]
+[Users]^[Student]
+[Faculty]^[Administrator]
+[Faculty]^[Teacher]
+
+[note: Does Faculty/Staff need an ID or should it only be students?{bg:cornsilk}]->[Users]

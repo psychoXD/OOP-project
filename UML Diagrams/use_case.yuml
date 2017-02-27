@@ -8,7 +8,6 @@
 [Student]
 [Teacher]
 [Administrator]
-[testActor]
 
 //***************************************
 // Cases
@@ -16,7 +15,6 @@
 (Student)-(Login)
 (Teacher)-(Login)
 (Administrator)-(Login)
-(testActor)-(Login)
 
 (Student)-(Enroll in a Class)
 (Student)-(View Class Schedule)
