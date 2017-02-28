@@ -55,3 +55,5 @@
 (Manage Class)>(Update Class Attendance)
 
 (Login)>(Logout)
+
+(note: Included in Login {bg:beige})-(Logout)
