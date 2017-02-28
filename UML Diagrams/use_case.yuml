@@ -17,7 +17,7 @@
 (Administrator)-(Login)
 
 (Student)-(Enroll in a Class)
-(Student)-(View Class Schedule)
+(Student)-(View Courses)
 (Student)-(Check Grades)
 (Student)-(View Class Files)
 (Student)-(Submit Assignments)
@@ -36,7 +36,7 @@
 (Manage Database)>(Remove Student)
 
 (Teacher)-(Manage Class)
-(Teacher)-(View Class Schedule)
+(Teacher)-(View Courses)
 (Teacher)-(Upload Class Files)
 (Teacher)-(Delete Class Files)
 (Teacher)-(View Class Files)
@@ -53,3 +53,5 @@
 (Manage Class)>(Update Grades)
 (Manage Class)>(Update Assignments)
 (Manage Class)>(Update Class Attendance)
+
+(Login)>(Logout)
