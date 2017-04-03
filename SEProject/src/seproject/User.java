@@ -9,14 +9,11 @@ package seproject;
  *
  * @author reticent
  */
-public class SEProject {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        LoginMenu gui = new LoginMenu();
-        gui.setVisible(true);
-    }
-    
+public class User {
+    //Declared Attributes/Variables
+    String username;
+    String passowrd;
+    String firstName;
+    String lastName;
+    int id;
 }
