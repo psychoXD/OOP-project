@@ -90,3 +90,4 @@ CREATE TABLE Assignment
     Grade INT,
     PRIMARY KEY (DocumentNo, StudentID)
 );
+

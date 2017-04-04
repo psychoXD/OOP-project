@@ -119,7 +119,18 @@ public class LoginMenu extends javax.swing.JFrame {
         
         if (db.checkLogin(txtUsername.getText(), txtPassword.getPassword()))
         {
+            User user = db.getLoginInfo(txtUsername.getText());
+            String typeOfClass = user.getClass().getSimpleName();
             
+            if(typeOfClass.equals("Staff")) //If user is a Staff
+            {
+                StaffGUI gui = new StaffGUI();
+                gui.setVisible(true);
+            }
+            else //else, User is a Student
+            {
+                
+            }
         }
         else
         {
