@@ -5,6 +5,7 @@
  */
 package seproject;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 /**
@@ -201,6 +202,38 @@ public class Database {
         {
             System.out.println("Error while getLoginInfo(): " + e);
             return null;
+        }
+    }
+    
+    /**
+     * changeUserPwd(String, char [])
+     * --------------------------------------------
+     * Changes User Password and Salt from Login Table.
+     * @param Username
+     * @param pwd
+     * @return 
+     */
+    public void changeUserPwd(String username, char [] pwd) throws NoSuchAlgorithmException
+    {
+        //boolean b = true;
+        try
+        {
+            byte [] salt = new PasswordHashing().createSalt();
+            String hashPwd = new PasswordHashing().getHash(pwd,salt);
+        
+            preparedStatement = 
+                    connect.prepareStatement("UPDATE Login SET Password=?, pwdSalt=? "
+                            + "WHERE Username=?");
+            preparedStatement.setString(1, hashPwd);
+            preparedStatement.setBytes(2, salt);
+            preparedStatement.setString(3, username);
+            preparedStatement.executeUpdate();
+            //return b;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error changing password: " + e);
+            //return false;
         }
     }
     

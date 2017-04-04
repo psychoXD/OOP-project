@@ -35,6 +35,7 @@ public class LoginMenu extends javax.swing.JFrame {
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
         btnLogin = new javax.swing.JButton();
+        btnChangePassword = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login Menu SIMS");
@@ -53,6 +54,13 @@ public class LoginMenu extends javax.swing.JFrame {
             }
         });
 
+        btnChangePassword.setText("Change Password");
+        btnChangePassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangePasswordActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -64,8 +72,9 @@ public class LoginMenu extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnLogin)
-                        .addGap(0, 182, Short.MAX_VALUE))
+                        .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnChangePassword))
                     .addComponent(txtPassword)
                     .addComponent(txtUsername))
                 .addContainerGap())
@@ -82,7 +91,9 @@ public class LoginMenu extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPassword))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(btnLogin)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLogin)
+                    .addComponent(btnChangePassword))
                 .addContainerGap())
         );
 
@@ -124,8 +135,9 @@ public class LoginMenu extends javax.swing.JFrame {
             
             if(typeOfClass.equals("Staff")) //If user is a Staff
             {
-                StaffGUI gui = new StaffGUI();
+                StaffGUI gui = new StaffGUI(user);
                 gui.setVisible(true);
+                this.dispose();
             }
             else //else, User is a Student
             {
@@ -140,6 +152,17 @@ public class LoginMenu extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    /**
+     * btnChangePassword Action Performed
+     * -----------------------------------------------------
+     * 
+     * @param evt 
+     */
+    private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
+        ChangePasswordGUI gui = new ChangePasswordGUI();
+        gui.setVisible(true);
+    }//GEN-LAST:event_btnChangePasswordActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,6 +200,7 @@ public class LoginMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnLogin;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblPassword;

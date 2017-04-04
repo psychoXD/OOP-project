@@ -10,12 +10,36 @@ package seproject;
  * @author reticent
  */
 public class StaffGUI extends javax.swing.JFrame {
+    
+    //Declared Member Variables
+    private Staff user;  //Holds User class of current User
 
     /**
      * Creates new form StaffGUI
      */
     public StaffGUI() {
         initComponents();
+    }
+
+    /**
+     * StaffGUI(User user)
+     * ------------------------------
+     * StaffUI Constructor with 1 constructor.
+     * @param user 
+     */
+    public StaffGUI(User user) {
+        initComponents();
+        this.user = (Staff)user;
+        
+        if (this.user.getPosition().equals("Database Administrator"))
+        {
+            btnAdminManage.setVisible(true);
+        }
+        else
+        {
+            btnAdminManage.setVisible(false);
+        }
+        
     }
 
     /**
@@ -27,21 +51,115 @@ public class StaffGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        pnlManageClasses = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMngClasses = new javax.swing.JTable();
+        btnAdminManage = new javax.swing.JButton();
+        pnlManageAssignments = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SIMS Staff GUI");
+        setResizable(false);
+
+        tblMngClasses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Section No.", "Course ID", "Room No.", "Class Days", "Class Time", "Staff ID"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblMngClasses);
+
+        btnAdminManage.setText("Admin Only");
+        btnAdminManage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminManageActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlManageClassesLayout = new javax.swing.GroupLayout(pnlManageClasses);
+        pnlManageClasses.setLayout(pnlManageClassesLayout);
+        pnlManageClassesLayout.setHorizontalGroup(
+            pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlManageClassesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(511, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlManageClassesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAdminManage)
+                .addContainerGap())
+        );
+        pnlManageClassesLayout.setVerticalGroup(
+            pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlManageClassesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                .addComponent(btnAdminManage)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Manage Classes", pnlManageClasses);
+
+        javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
+        pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
+        pnlManageAssignmentsLayout.setHorizontalGroup(
+            pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1168, Short.MAX_VALUE)
+        );
+        pnlManageAssignmentsLayout.setVerticalGroup(
+            pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 639, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Manage Assignment", pnlManageAssignments);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAdminManageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminManageActionPerformed
+        AdminGUI gui = new AdminGUI();
+        gui.setVisible(true);
+    }//GEN-LAST:event_btnAdminManageActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +197,11 @@ public class StaffGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdminManage;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel pnlManageAssignments;
+    private javax.swing.JPanel pnlManageClasses;
+    private javax.swing.JTable tblMngClasses;
     // End of variables declaration//GEN-END:variables
 }

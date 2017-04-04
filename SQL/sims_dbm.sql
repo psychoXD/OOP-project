@@ -47,7 +47,7 @@ CREATE TABLE Class
 (
     SectionNo INT NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (SectionNo),
-    CourseID INT,
+    CourseID VARCHAR(15),
     RoomNo VARCHAR(10),
     ClassTime DATE,
     ClassDays VARCHAR (2),
