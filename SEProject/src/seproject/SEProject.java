@@ -15,7 +15,8 @@ public class SEProject {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        LoginMenu gui = new LoginMenu();
+        gui.setVisible(true);
     }
     
 }
