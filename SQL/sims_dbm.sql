@@ -49,12 +49,13 @@ CREATE TABLE Class
         PRIMARY KEY (SectionNo),
     CourseID VARCHAR(15),
     RoomNo VARCHAR(10),
-    ClassTime DATE,
-    ClassDays VARCHAR (2),
+    ClassBeginTime TIME,
+    ClassEndTime TIME,
+    ClassDays VARCHAR (5),
     StaffID INT NOT NULL,
         FOREIGN KEY fk_StaffID(StaffID)
         REFERENCES  SchoolStaff(StaffID)
-);
+) ENGINE=InnoDB AUTO_INCREMENT=1000000;
 
 CREATE TABLE Student_Class
 (

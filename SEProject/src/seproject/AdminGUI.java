@@ -59,6 +59,8 @@ public class AdminGUI extends javax.swing.JFrame {
         btnRemoveNewCourse = new javax.swing.JButton();
         btnSubmitNewCourses = new javax.swing.JButton();
         pnlManageUsers = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblManageUsers = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -146,11 +148,11 @@ public class AdminGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Course ID", "Room No", "Time", "Day", "Staff ID"
+                "Course ID", "Room No", "Begin Time", "End Time", "Day", "Staff ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -212,15 +214,39 @@ public class AdminGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Add Courses", pnlAddClasses);
 
+        tblManageUsers.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User ID", "Username", "First Name", "Last Name", "Position", "Department"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblManageUsers);
+
         javax.swing.GroupLayout pnlManageUsersLayout = new javax.swing.GroupLayout(pnlManageUsers);
         pnlManageUsers.setLayout(pnlManageUsersLayout);
         pnlManageUsersLayout.setHorizontalGroup(
             pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 998, Short.MAX_VALUE)
+            .addGroup(pnlManageUsersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(186, Short.MAX_VALUE))
         );
         pnlManageUsersLayout.setVerticalGroup(
             pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGroup(pnlManageUsersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Manage Users", pnlManageUsers);
@@ -244,7 +270,7 @@ public class AdminGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1006, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -348,49 +374,110 @@ public class AdminGUI extends javax.swing.JFrame {
         String department;  //Department User Works (If applicable)
         int sizeOfTable = tblAddUser.getRowCount(); //Size of the table
         int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
-        int result = JOptionPane.showConfirmDialog 
-               (null, "Are you sure you want to submit?","Warning",dialogButton);
         Object [] o;    //Stores the content of the User (School Staff = 4 items / Student = 2 items)
         boolean b;  //Return true if create user was successful, else false
-                        
-        if(result == JOptionPane.YES_OPTION)
+        
+        if (sizeOfTable != 0)
         {
-            for (int x = 0; x < sizeOfTable; x++)
+            int result = JOptionPane.showConfirmDialog 
+                   (null, "Are you sure you want to submit?","Warning",dialogButton);
+            if(result == JOptionPane.YES_OPTION)
             {
-                firstName = (String)tblAddUser.getValueAt(x, 0);
-                lastName = (String)tblAddUser.getValueAt(x, 1);
-
-                if (!(firstName == null || lastName == null))   //If both firstName and lastName are not null
+                for (int x = 0; x < sizeOfTable; x++)
                 {
-                    if (firstName.equals("") || lastName.equals("")) //If either firstName or lastName is blank "" (Error with row)
+                    firstName = (String)tblAddUser.getValueAt(x, 0);
+                    lastName = (String)tblAddUser.getValueAt(x, 1);
+
+                    if (!(firstName == null || lastName == null))   //If both firstName and lastName are not null
                     {
-                        JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,"Error Adding User (Blank Name)",
-                                        JOptionPane.ERROR_MESSAGE);
-                    }
-                    else //firstName and lastName are not blank
-                    {
-                        position = (String)tblAddUser.getValueAt(x, 2);
-                        department = (String)tblAddUser.getValueAt(x, 3);
-                        
-                        if (!(position == null || department == null)) //Position and Department != null
+                        if (firstName.equals("") || lastName.equals("")) //If either firstName or lastName is blank "" (Error with row)
                         {
-                            if (position.equals("") && department.equals("")) //Adds New Student User to database (Login & Student)
+                            JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,"Error Adding User (Blank Name)",
+                                            JOptionPane.ERROR_MESSAGE);
+                        }
+                        else //firstName and lastName are not blank
+                        {
+                            position = (String)tblAddUser.getValueAt(x, 2);
+                            department = (String)tblAddUser.getValueAt(x, 3);
+
+                            if (!(position == null || department == null)) //Position and Department != null
+                            {
+                                if (position.equals("") && department.equals("")) //Adds New Student User to database (Login & Student)
+                                {
+                                    int i = 2;
+                                    o = new Object[i];
+                                    o[0] = firstName;
+                                    o[1] = lastName;
+                                    try
+                                    {
+                                        b = db.createUser(i, o);
+
+                                        if (b)
+                                        {
+                                            System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Create Student User Rejected("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        System.out.println("Error adding New Student User (AdminGUI): " + e);
+                                    }
+                                }
+                                else if (position.equals("") || department.equals("")) //Position and Department contains blank String "" (Error with row)
+                                {
+                                    JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName 
+                                                                        + "\nDPosition: " + position + "\nDepartment: " + department
+                                                                        ,"Error Adding Staff User", JOptionPane.ERROR_MESSAGE);
+                                }
+                                else //Add new Staff to database (Login & SchoolStaff)
+                                {
+                                    int i = 4;
+                                    o = new Object[i];
+                                    o[0] = firstName;
+                                    o[1] = lastName;
+                                    o[2] = position;
+                                    o[3] =  department;
+
+                                    try
+                                    {
+                                        b = db.createUser(i, o);
+
+                                        if (b)
+                                        {
+                                            System.out.println("Create Staff User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Create Staff User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        System.out.println("Error adding New User Staff(AdminGUI): " + e);
+                                    }
+                                }
+                            }
+                            else //Adds New Student User to database (Login & Student)
                             {
                                 int i = 2;
                                 o = new Object[i];
                                 o[0] = firstName;
                                 o[1] = lastName;
+
                                 try
                                 {
                                     b = db.createUser(i, o);
-                                    
+
                                     if (b)
                                     {
                                         System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
                                     }
                                     else
                                     {
-                                        System.out.println("Create Student User Rejected("+ x +"): " + lastName + ", "+ firstName);
+                                        System.out.println("Create Student User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
                                     }
                                 }
                                 catch(Exception e)
@@ -398,81 +485,23 @@ public class AdminGUI extends javax.swing.JFrame {
                                     System.out.println("Error adding New Student User (AdminGUI): " + e);
                                 }
                             }
-                            else if (position.equals("") || department.equals("")) //Position and Department contains blank String "" (Error with row)
-                            {
-                                JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName 
-                                                                    + "\nDPosition: " + position + "\nDepartment: " + department
-                                                                    ,"Error Adding Staff User", JOptionPane.ERROR_MESSAGE);
-                            }
-                            else //Add new Staff to database (Login & SchoolStaff)
-                            {
-                                int i = 4;
-                                o = new Object[i];
-                                o[0] = firstName;
-                                o[1] = lastName;
-                                o[2] = position;
-                                o[3] =  department;
-                                
-                                try
-                                {
-                                    b = db.createUser(i, o);
-                                    
-                                    if (b)
-                                    {
-                                        System.out.println("Create Staff User Successful("+ x +"): " + lastName + ", "+ firstName);
-                                    }
-                                    else
-                                    {
-                                        System.out.println("Create Staff User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
-                                    }
-                                }
-                                catch(Exception e)
-                                {
-                                    System.out.println("Error adding New User Staff(AdminGUI): " + e);
-                                }
-                            }
-                        }
-                        else //Adds New Student User to database (Login & Student)
-                        {
-                            int i = 2;
-                            o = new Object[i];
-                            o[0] = firstName;
-                            o[1] = lastName;
-                            
-                            try
-                            {
-                                b = db.createUser(i, o);
-                                
-                                if (b)
-                                {
-                                    System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
-                                }
-                                else
-                                {
-                                    System.out.println("Create Student User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
-                                }
-                            }
-                            catch(Exception e)
-                            {
-                                System.out.println("Error adding New Student User (AdminGUI): " + e);
-                            }
                         }
                     }
+                    else //else, firstName or lastName are null (Error with row)
+                    {
+                        JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,
+                                                            "Error Adding User(1 First/Last Name is Null)", JOptionPane.ERROR_MESSAGE);
+
+                    }
+
+                    if (x == sizeOfTable-1)
+                    {
+                        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                        model.setRowCount(0);
+                    }
                 }
-                else //else, firstName or lastName are null (Error with row)
-                {
-                    JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,
-                                                        "Error Adding User(1 First/Last Name is Null)", JOptionPane.ERROR_MESSAGE);
-                    
-                }
-                
-                if (x == sizeOfTable-1)
-                {
-                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                    model.setRowCount(0);
-                }
+
             }
-            
         }
     }//GEN-LAST:event_btnSubmitNewUsersActionPerformed
 
@@ -486,7 +515,8 @@ public class AdminGUI extends javax.swing.JFrame {
        //Instanced Variables
         String courseID;    //Holds CourseID (ex. CS3304)
         String roomNo;  //Holds Class Room No.
-        String time;    //Holds Class Time in String (temp)
+        String beginTime;    //Holds Class Time in String (temp)
+        String endTime;    //Holds Class Time in String (temp)
         String day; //Holds Days (ex. MW = Monday & Wednesday)
         int id; //Holds selected staffID
         ArrayList<Integer> staffID = db.getAllProfessorID();    //Holds Staff teaching course/class
@@ -503,27 +533,28 @@ public class AdminGUI extends javax.swing.JFrame {
         if (sizeOfTable == 0)
         {
             DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
-            model.addRow(new Object[]{null,null,null,null,null} );
+            model.addRow(new Object[]{null,null,null,null,null,null} );
             
-            TableColumn staffIDColumn = tblAddNewCourses.getColumnModel().getColumn(4);
+            TableColumn staffIDColumn = tblAddNewCourses.getColumnModel().getColumn(5);
             staffIDColumn.setCellEditor(new DefaultCellEditor(staffIDList));
         }
         else 
         {    
             courseID = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 0);
             roomNo = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 1);
-            time = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 2);
-            day = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 3);
-            Object o = (Object)tblAddNewCourses.getValueAt(sizeOfTable-1, 4);
+            beginTime = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 2);
+            endTime = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 3);
+            day = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 4);
+            Object o = (Object)tblAddNewCourses.getValueAt(sizeOfTable-1, 5);
             
-            if ( !(courseID == null || roomNo == null || time == null || day == null || o == null ))
+            if ( !(courseID == null || roomNo == null || beginTime == null || endTime == null || day == null || o == null ))
             {
                 id = (int)o;
                 
-                if (!(courseID.equals("") || roomNo.equals("") ||time.equals("") || day.equals("")))
+                if (!(courseID.equals("") || roomNo.equals("") || beginTime.equals("") || endTime.equals("") || day.equals("")))
                 {
                     DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
-                    model.addRow(new Object[]{null,null,null,null,null} );
+                    model.addRow(new Object[]{null,null,null,null,null,null} );
                 }
                 else
                 {
@@ -562,7 +593,114 @@ public class AdminGUI extends javax.swing.JFrame {
      * @param evt 
      */
     private void btnSubmitNewCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitNewCoursesActionPerformed
-        // TODO add your handling code here:
+        
+        //Instanced Variables
+        String courseID;   //CourseID (ex. CS3304, etc.)
+        String roomNo;    //Room course is being taught in.
+        String beginTime; //Time (in 24-Hour)
+        String endTime; //Time (in 24-Hour)
+        String day; //Day(s) of Class (M = Monday,  T = Tuesday, W= Wednesday, Th = Thursday, F = Friday, S=Saturday)
+        int id = 0;  //Holds staff ID
+        
+        int sizeOfTable = tblAddNewCourses.getRowCount(); //Size of the table
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+
+        Object [] o;    //Stores the content of the courses to send to Database createNewCourse(Object [] o) function
+        boolean b;  //Return true if create courses was successful, else false
+
+       if (sizeOfTable != 0)
+       {
+           int result = JOptionPane.showConfirmDialog 
+               (null, "Are you sure you want to submit?","Warning",dialogButton);
+           if(result == JOptionPane.YES_OPTION)
+           {
+               for (int x = 0; x < sizeOfTable; x++)
+               {
+                   courseID = (String)tblAddNewCourses.getValueAt(x, 0);
+                   roomNo = (String)tblAddNewCourses.getValueAt(x, 1);
+                   beginTime = (String)tblAddNewCourses.getValueAt(x, 2);
+                   endTime = (String)tblAddNewCourses.getValueAt(x, 3);
+                   day = (String)tblAddNewCourses.getValueAt(x, 4);
+                   Object temp = tblAddNewCourses.getValueAt(x, 5); //Temporarily holds StaffID as object
+                   
+                   if (!(courseID == null || roomNo == null || beginTime == null 
+                           || endTime == null || day == null || temp == null))
+                   {
+                       id = (int)temp;
+                       
+                       if (!(courseID.equals("") || roomNo.equals("") || beginTime.equals("")
+                               || endTime.equals("") || day.equals("") || id == 0))
+                       {
+                           try
+                           {
+                               o = new Object [6];
+                               o[0] = courseID;
+                               o[1] = roomNo;
+                               o[2] = beginTime;
+                               o[3] = endTime;
+                               o[4] = day;
+                               o[5] = id;
+                               
+                               b = db.createNewCourse(o);
+                               
+                               if (b)
+                               {
+                                   System.out.println("Create Course/Class Successful("+ x +"): " + courseID + ", "+ roomNo
+                                                        + "\n"+beginTime+"-"+endTime+ " "+day + "\n"+id);
+                               }
+                               else
+                               {
+                                   System.out.println("Create Course/Class Unsuccessful("+ x +"): " + courseID + ", "+ roomNo
+                                                        + "\n"+beginTime+"-"+endTime+ " "+day + "\n"+id);
+                               }
+                               
+                           }
+                           catch (Exception e)
+                           {
+                               System.out.println("Error Adding New Courses(AdminGUI): " + e);
+                           }
+                       }
+                       else //This should never happen (just in case)
+                       {
+                           JOptionPane.
+                            showMessageDialog(null, "The Following Course has empty values"
+                                    + "\nCourse ID: " + courseID
+                                    + "\nRoom No.: " + roomNo
+                                    + "\nBegin Time: " + beginTime
+                                    + "\nEnd Time: " + endTime
+                                    + "\nDay: " + day
+                                    + "\nStaff ID: " + id, 
+                                "Null Values in Table", JOptionPane.ERROR_MESSAGE);
+                       }
+                   }
+                   else
+                   {
+                       JOptionPane.
+                            showMessageDialog(null, "The Following Course has null values"
+                                    + "\nCourse ID: " + courseID
+                                    + "\nRoom No.: " + roomNo
+                                    + "\nBegin Time: " + beginTime
+                                    + "\nEnd Time: " + endTime
+                                    + "\nDay: " + day
+                                    + "\nStaff ID: " + id, 
+                                "Null Values in Table", JOptionPane.ERROR_MESSAGE);
+                   }
+                   
+                if (x == sizeOfTable-1)
+                {
+                    DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+                    model.setRowCount(0);
+                }
+                   
+               } //For loop    
+           }
+       }
+       else
+       {
+           JOptionPane.
+                   showMessageDialog(null, "New Courses Table is Empty!" ,
+                            "Empty Table", JOptionPane.ERROR_MESSAGE);
+       }
     }//GEN-LAST:event_btnSubmitNewCoursesActionPerformed
 
     /**
@@ -610,11 +748,13 @@ public class AdminGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel pnlAddClasses;
     private javax.swing.JPanel pnlAddUser;
     private javax.swing.JPanel pnlManageUsers;
     private javax.swing.JTable tblAddNewCourses;
     private javax.swing.JTable tblAddUser;
+    private javax.swing.JTable tblManageUsers;
     // End of variables declaration//GEN-END:variables
 }

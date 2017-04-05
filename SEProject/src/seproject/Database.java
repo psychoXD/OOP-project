@@ -7,6 +7,8 @@ package seproject;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -361,6 +363,41 @@ public class Database {
         return false;
     }
     
+    public boolean createNewCourse(Object [] o)
+    {
+        try
+        {
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
+            //Instanced Variables
+            String courseID = (String)o[0];
+            String RoomNo = (String)o[1];
+            Time beginTime = new Time(formatter.parse((String)o[2]).getTime());
+            Time endTime = new Time(formatter.parse((String)o[3]).getTime());
+            String day = (String)o[4];
+            int id = (int)o[5];
+            
+            //Preparing SQL Statement for Login (Student User)
+            preparedStatement = connect.
+                prepareStatement("INSERT INTO Class "
+                        + "(CourseID, RoomNo, ClassBeginTime, ClassEndTime, ClassDays, StaffID) "
+                        + "VALUES (?,?,?,?,?,?)");
+            preparedStatement.setString(1, courseID);
+            preparedStatement.setString(2, RoomNo);
+            preparedStatement.setTime(3, beginTime);
+            preparedStatement.setTime(4, endTime);
+            preparedStatement.setString(5, day);
+            preparedStatement.setInt(6, id);
+            preparedStatement.executeUpdate();
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Inserting New Courses in Database: " + e);
+            return false;
+        }
+    }
+    
     public ArrayList<Integer> getAllProfessorID()
     {
         try
@@ -426,7 +463,7 @@ public class Database {
             System.out.println("Error creating Username: " + e);
             return null;
         }
-    }   
+    }
     
     /**
      * getSalt(String uName)
