@@ -5,8 +5,12 @@
  */
 package seproject;
 
+import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -51,6 +55,8 @@ public class AdminGUI extends javax.swing.JFrame {
         pnlAddClasses = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblAddNewCourses = new javax.swing.JTable();
+        btnAddNewCourse = new javax.swing.JButton();
+        btnRemoveNewCourse = new javax.swing.JButton();
         pnlManageUsers = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
 
@@ -152,6 +158,20 @@ public class AdminGUI extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblAddNewCourses);
 
+        btnAddNewCourse.setText("Add Course");
+        btnAddNewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNewCourseActionPerformed(evt);
+            }
+        });
+
+        btnRemoveNewCourse.setText("Remove Course");
+        btnRemoveNewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveNewCourseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlAddClassesLayout = new javax.swing.GroupLayout(pnlAddClasses);
         pnlAddClasses.setLayout(pnlAddClassesLayout);
         pnlAddClassesLayout.setHorizontalGroup(
@@ -159,13 +179,23 @@ public class AdminGUI extends javax.swing.JFrame {
             .addGroup(pnlAddClassesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(173, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAddNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         pnlAddClassesLayout.setVerticalGroup(
             pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlAddClassesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                .addGroup(pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAddClassesLayout.createSequentialGroup()
+                        .addComponent(btnAddNewCourse)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRemoveNewCourse)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -240,7 +270,6 @@ public class AdminGUI extends javax.swing.JFrame {
         }
         else 
         {
-            System.out.println(sizeOfTable);
             firstName = (String)tblAddUser.getValueAt(sizeOfTable-1, 0);
             lastName = (String)tblAddUser.getValueAt(sizeOfTable-1, 1);
             
@@ -253,13 +282,13 @@ public class AdminGUI extends javax.swing.JFrame {
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(null, "First and/or Last Name are empty","Falied Adding New Row!!",
+                    JOptionPane.showMessageDialog(null, "First and/or Last Name are empty","Failed Adding New Row!!",
                                         JOptionPane.ERROR_MESSAGE);
                 }
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "First and/or Last Name are null","Falied Adding New Row!!",
+                JOptionPane.showMessageDialog(null, "First and/or Last Name are null","Failed Adding New Row!!",
                                         JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -352,13 +381,6 @@ public class AdminGUI extends javax.swing.JFrame {
                                     {
                                         System.out.println("Create Student User Rejected("+ x +"): " + lastName + ", "+ firstName);
                                     }
-                                    
-                                    //Clear Table
-                                    if (x == sizeOfTable-1)
-                                    {
-                                        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                                        model.setRowCount(0);
-                                    }
                                 }
                                 catch(Exception e)
                                 {
@@ -392,25 +414,12 @@ public class AdminGUI extends javax.swing.JFrame {
                                     {
                                         System.out.println("Create Staff User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
                                     }
-                                    
-                                    //Clear Table
-                                    if (x == sizeOfTable-1)
-                                    {
-                                        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                                        model.setRowCount(0);
-                                    }
                                 }
                                 catch(Exception e)
                                 {
                                     System.out.println("Error adding New User Staff(AdminGUI): " + e);
                                 }
                             }
-                        }
-                        else if (position == null || department == null) //Attempting to add Staff but missed 1 field
-                        {
-                            JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName 
-                                                                    + "\nDPosition: " + position + "\nDepartment: " + department
-                                                                    ,"Error Adding Staff User (1 Null Field)", JOptionPane.ERROR_MESSAGE);
                         }
                         else //Adds New Student User to database (Login & Student)
                         {
@@ -431,13 +440,6 @@ public class AdminGUI extends javax.swing.JFrame {
                                 {
                                     System.out.println("Create Student User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
                                 }
-                                
-                                //Clear Table
-                                if (x == sizeOfTable-1)
-                                {
-                                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                                    model.setRowCount(0);
-                                }
                             }
                             catch(Exception e)
                             {
@@ -450,11 +452,92 @@ public class AdminGUI extends javax.swing.JFrame {
                 {
                     JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,
                                                         "Error Adding User(1 First/Last Name is Null)", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                
+                if (x == sizeOfTable-1)
+                {
+                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                    model.setRowCount(0);
                 }
             }
             
         }
     }//GEN-LAST:event_btnSubmitNewUsersActionPerformed
+
+    /**
+     * btnAddNewCourse Action Performed
+     * --------------------------------------------------------
+     * Submits Courses with appropriate fields to Class Table.
+     * @param evt 
+     */
+    private void btnAddNewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewCourseActionPerformed
+       //Instanced Variables
+        String courseID;    //Holds CourseID (ex. CS3304)
+        String roomNo;  //Holds Class Room No.
+        String time;    //Holds Class Time in String (temp)
+        String day; //Holds Days (ex. MW = Monday & Wednesday)
+        ArrayList<Integer> staffID = db.getAllProfessorID();    //Holds Staff teaching course/class
+        int sizeOfTable = tblAddNewCourses.getRowCount();   //Holds current size of table (based on rows)
+        JComboBox staffIDList = new JComboBox();    //Stores JComboBox of Teacher ID
+        
+        //Fill JCombo Box with Staff ID
+        for (int x = 0; x < staffID.size(); x++)
+        {
+            staffIDList.addItem(staffID.get(x));
+        }
+        
+        if (sizeOfTable == 0)
+        {
+            DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+            model.addRow(new Object[]{null,null,null,null,null} );
+            
+            TableColumn staffIDColumn = tblAddNewCourses.getColumnModel().getColumn(4);
+            staffIDColumn.setCellEditor(new DefaultCellEditor(staffIDList));
+        }
+        else 
+        {    
+            courseID = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 0);
+            roomNo = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 1);
+            time = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 2);
+            day = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 3);
+            
+            if ( !(courseID == null || roomNo == null))
+            {
+                if (!(courseID.equals("") || roomNo.equals("")))
+                {
+                    DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+                    model.addRow(new Object[]{null,null,null,null} );
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Testing 1","Failed Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Testing 2","Failed Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnAddNewCourseActionPerformed
+
+    /**
+     * btnRemoveNewCourse Action Performed
+     * ---------------------------------------------------
+     * Removes selected new courses from the table.
+     * @param evt 
+     */
+    private void btnRemoveNewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveNewCourseActionPerformed
+        DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+        int selectedRow = tblAddNewCourses.getSelectedRow();
+        
+        if(selectedRow != -1) 
+        {
+            model.removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_btnRemoveNewCourseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,8 +575,10 @@ public class AdminGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddNewCourse;
     private javax.swing.JButton btnAddNewUsers;
     private javax.swing.JButton btnNewRemoveUser;
+    private javax.swing.JButton btnRemoveNewCourse;
     private javax.swing.JButton btnSubmitNewUsers;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

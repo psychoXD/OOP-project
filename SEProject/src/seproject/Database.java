@@ -7,6 +7,7 @@ package seproject;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -329,7 +330,7 @@ public class Database {
                     preparedStatement.setString(4, "Student");
                     preparedStatement.executeUpdate();
                     
-                     //Getting User ID
+                    //Getting User ID
                     preparedStatement = connect.prepareStatement("SELECT UserID FROM Login WHERE Username =?");
                     preparedStatement.setString(1,  username);
                     resultSet = preparedStatement.executeQuery();
@@ -358,6 +359,34 @@ public class Database {
             }
         }
         return false;
+    }
+    
+    public ArrayList<Integer> getAllProfessorID()
+    {
+        try
+        {
+            ArrayList<Integer> l = new ArrayList<Integer>();    //Holds all Teacher ID
+            int id; //Holds current Teacher ID
+            
+            //Getting User ID
+            preparedStatement = connect.prepareStatement("SELECT StaffID FROM SchoolStaff WHERE Position =?");
+            preparedStatement.setString(1, "Teacher");
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                id = resultSet.getInt("StaffID");
+                l.add(id);
+            }
+            
+            
+            return l;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error retrieving all Professor: " + e);
+            return null;
+        }
     }
     
     /**
