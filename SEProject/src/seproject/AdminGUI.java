@@ -244,25 +244,23 @@ public class AdminGUI extends javax.swing.JFrame {
             firstName = (String)tblAddUser.getValueAt(sizeOfTable-1, 0);
             lastName = (String)tblAddUser.getValueAt(sizeOfTable-1, 1);
             
-            //System.out.println("FirstName: " + firstName + " | LastName: " + lastName);
-            
             if ( !(firstName == null || lastName == null))
             {
-                System.out.println("First and Last Name are not null");
                 if (!(firstName.equals("") || lastName.equals("")))
                 {
-                    System.out.println("First and Last Name are not empty");
                     DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
                     model.addRow(new Object[]{null,null,null,null} );
                 }
                 else
                 {
-                    System.out.println("First and/or Last Name are empty");
+                    JOptionPane.showMessageDialog(null, "First and/or Last Name are empty","Falied Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
                 }
             }
             else
             {
-                System.out.println("First and/or Last Name are null");
+                JOptionPane.showMessageDialog(null, "First and/or Last Name are null","Falied Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
             }
         }
         
@@ -313,6 +311,7 @@ public class AdminGUI extends javax.swing.JFrame {
         int result = JOptionPane.showConfirmDialog 
                (null, "Are you sure you want to submit?","Warning",dialogButton);
         Object [] o;    //Stores the content of the User (School Staff = 4 items / Student = 2 items)
+        boolean b;  //Return true if create user was successful, else false
                         
         if(result == JOptionPane.YES_OPTION)
         {
@@ -323,9 +322,10 @@ public class AdminGUI extends javax.swing.JFrame {
 
                 if (!(firstName == null || lastName == null))   //If both firstName and lastName are not null
                 {
-                    if (firstName.equals("") || firstName.equals("")) //If either firstName or lastName is blank "" (Error with row)
+                    if (firstName.equals("") || lastName.equals("")) //If either firstName or lastName is blank "" (Error with row)
                     {
-                        
+                        JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,"Error Adding User (Blank Name)",
+                                        JOptionPane.ERROR_MESSAGE);
                     }
                     else //firstName and lastName are not blank
                     {
@@ -342,11 +342,23 @@ public class AdminGUI extends javax.swing.JFrame {
                                 o[1] = lastName;
                                 try
                                 {
-                                    db.createUser(i, o);
+                                    b = db.createUser(i, o);
+                                    
+                                    if (b)
+                                    {
+                                        System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Create Student User Rejected("+ x +"): " + lastName + ", "+ firstName);
+                                    }
                                     
                                     //Clear Table
-                                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                                    model.setRowCount(0);
+                                    if (x == sizeOfTable-1)
+                                    {
+                                        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                                        model.setRowCount(0);
+                                    }
                                 }
                                 catch(Exception e)
                                 {
@@ -355,7 +367,9 @@ public class AdminGUI extends javax.swing.JFrame {
                             }
                             else if (position.equals("") || department.equals("")) //Position and Department contains blank String "" (Error with row)
                             {
-                                
+                                JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName 
+                                                                    + "\nDPosition: " + position + "\nDepartment: " + department
+                                                                    ,"Error Adding Staff User", JOptionPane.ERROR_MESSAGE);
                             }
                             else //Add new Staff to database (Login & SchoolStaff)
                             {
@@ -368,17 +382,35 @@ public class AdminGUI extends javax.swing.JFrame {
                                 
                                 try
                                 {
-                                    db.createUser(i, o);
+                                    b = db.createUser(i, o);
+                                    
+                                    if (b)
+                                    {
+                                        System.out.println("Create Staff User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Create Staff User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
+                                    }
                                     
                                     //Clear Table
-                                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                                    model.setRowCount(0);
+                                    if (x == sizeOfTable-1)
+                                    {
+                                        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                                        model.setRowCount(0);
+                                    }
                                 }
                                 catch(Exception e)
                                 {
                                     System.out.println("Error adding New User Staff(AdminGUI): " + e);
                                 }
                             }
+                        }
+                        else if (position == null || department == null) //Attempting to add Staff but missed 1 field
+                        {
+                            JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName 
+                                                                    + "\nDPosition: " + position + "\nDepartment: " + department
+                                                                    ,"Error Adding Staff User (1 Null Field)", JOptionPane.ERROR_MESSAGE);
                         }
                         else //Adds New Student User to database (Login & Student)
                         {
@@ -389,11 +421,23 @@ public class AdminGUI extends javax.swing.JFrame {
                             
                             try
                             {
-                                db.createUser(i, o);
+                                b = db.createUser(i, o);
+                                
+                                if (b)
+                                {
+                                    System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                }
+                                else
+                                {
+                                    System.out.println("Create Student User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
+                                }
                                 
                                 //Clear Table
-                                DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
-                                model.setRowCount(0);
+                                if (x == sizeOfTable-1)
+                                {
+                                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                                    model.setRowCount(0);
+                                }
                             }
                             catch(Exception e)
                             {
@@ -404,7 +448,8 @@ public class AdminGUI extends javax.swing.JFrame {
                 }
                 else //else, firstName or lastName are null (Error with row)
                 {
-
+                    JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,
+                                                        "Error Adding User(1 First/Last Name is Null)", JOptionPane.ERROR_MESSAGE);
                 }
             }
             

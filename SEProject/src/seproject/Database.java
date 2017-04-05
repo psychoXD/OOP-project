@@ -244,9 +244,10 @@ public class Database {
      * Table, depending on the size of the object.
      * @param size
      * @param o
+     * @return 
      * @throws java.security.NoSuchAlgorithmException
      */
-    public void createUser(int size, Object[] o) throws NoSuchAlgorithmException
+    public boolean createUser(int size, Object[] o) throws NoSuchAlgorithmException
     {
         String firstName = (String)o[0];   //First Name of User
         String lastName = (String)o[1];    //Last Name of User
@@ -254,6 +255,7 @@ public class Database {
         
         if (username == null)
         {
+            return false;
             //Dummy if statement//
         }
         else
@@ -301,10 +303,12 @@ public class Database {
                     preparedStatement.setString(4, position);
                     preparedStatement.setString(5, department);
                     preparedStatement.executeUpdate();
+                    return true;
                 }
                 catch (Exception e)
                 {
                     System.out.println("Error Inserting/Creating Staff User Account: " + e);
+                    return false;
                 }
 
             }
@@ -344,13 +348,16 @@ public class Database {
                     preparedStatement.setString(2, firstName);
                     preparedStatement.setString(3, lastName);
                     preparedStatement.executeUpdate();
+                    return true;
                 }
                 catch (Exception e)
                 {
                     System.out.println("Error Inserting/Creating Student User Account: " + e);
+                    return false;
                 }
             }
         }
+        return false;
     }
     
     /**
@@ -368,15 +375,14 @@ public class Database {
         try
         {
             preparedStatement = connect.
-                    prepareStatement("SELECT COUNT(*) FROM Login "
-                            + "WHERE Username LIKE ?");
-            preparedStatement.setString(1, "\"%"+ s + "%\"");
+                    prepareStatement("SELECT COUNT(*) AS count FROM Login WHERE Username LIKE ?");
+            preparedStatement.setString(1,"%"+username+"%");
             
             resultSet = preparedStatement.executeQuery();
             
             if (resultSet.next())
             {
-                int num = resultSet.getInt(1);
+                int num = resultSet.getInt("count");
                 username += (num+1);
                 return username;
             }
@@ -384,6 +390,7 @@ public class Database {
             {
                 return null;
             }
+            
         }
         catch (Exception e)
         {
