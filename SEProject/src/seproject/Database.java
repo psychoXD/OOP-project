@@ -426,6 +426,93 @@ public class Database {
         }
     }
     
+    public ArrayList<ArrayList<Object>> getAllUserInfo()
+    {
+        try
+        {
+            ArrayList<ArrayList<Object> >o = new ArrayList<ArrayList<Object>>();    //Holds all Teacher ID
+            int id; //Holds current Teacher ID
+            String username = "";    //Holds username of User
+            String firstName = "";   //First Name of User
+            String lastName = "";    //Last Name of User
+            String position = "";    //Holds Staff Position, if applicable
+            String department = "";  //Holds Department Staff works in, if applicable
+            ArrayList<Object> temp;
+            
+            //Getting User ID
+            preparedStatement = connect.prepareStatement("SELECT UserID, Username,Role FROM Login");
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                temp = new ArrayList<Object>();
+                id = resultSet.getInt("UserID");
+                username = resultSet.getString("Username");
+                String role = resultSet.getString("Role");
+                
+                temp.add(id);
+                temp.add(username);
+                
+                //Check what role User has (Either Staff or Student)
+                if (role.equals("Staff"))
+                {
+                    preparedStatement = 
+                            connect.prepareStatement
+                                ("SELECT FirstName, LastName, Position, Department FROM SchoolStaff WHERE StaffID= ? AND Position =?");
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setString(2, "Teacher");
+                    resultSet = preparedStatement.executeQuery();
+                    
+                    if (resultSet.next())
+                    {
+                        firstName = resultSet.getString("FirstName");
+                        lastName = resultSet.getString("LastName");
+                        position = resultSet.getString("Position");
+                        department = resultSet.getString("Department");
+                        
+                        temp.add(firstName);
+                        temp.add(lastName);
+                        temp.add(position);
+                        temp.add(department);
+                        
+                        o.add(temp);
+                    }
+                }
+                else 
+                {
+                    preparedStatement = 
+                            connect.prepareStatement
+                                ("SELECT FirstName, LastName FROM Student WHERE StudentID= ?");
+                    preparedStatement.setInt(1, id);
+                    resultSet = preparedStatement.executeQuery();
+                    
+                    if (resultSet.next())
+                    {
+                        firstName = resultSet.getString("FirstName");
+                        lastName = resultSet.getString("LastName");
+                        
+                        temp.add(firstName);
+                        temp.add(lastName);
+                        
+                        o.add(temp);
+                    }
+                }
+                
+                for (int a = 0; a < o.size(); a++)
+                {
+                    System.out.println(o.get(a).size() + "\ntemp");
+                }
+            }
+            
+            return o;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error retrieving all User information(getAllUser() function): " + e);
+            return null;
+        }
+    }
+    
     /**
      * createUsername(String s)
      * -----------------------------------

@@ -61,6 +61,7 @@ public class AdminGUI extends javax.swing.JFrame {
         pnlManageUsers = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblManageUsers = new javax.swing.JTable();
+        btnRefreshUserTable = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -232,6 +233,13 @@ public class AdminGUI extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tblManageUsers);
 
+        btnRefreshUserTable.setText("Refresh");
+        btnRefreshUserTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshUserTableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlManageUsersLayout = new javax.swing.GroupLayout(pnlManageUsers);
         pnlManageUsers.setLayout(pnlManageUsersLayout);
         pnlManageUsersLayout.setHorizontalGroup(
@@ -239,13 +247,19 @@ public class AdminGUI extends javax.swing.JFrame {
             .addGroup(pnlManageUsersLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnRefreshUserTable, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         pnlManageUsersLayout.setVerticalGroup(
             pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlManageUsersLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                .addGroup(pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlManageUsersLayout.createSequentialGroup()
+                        .addComponent(btnRefreshUserTable)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -704,6 +718,23 @@ public class AdminGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSubmitNewCoursesActionPerformed
 
     /**
+     * btnRefreshUserTable
+     * -------------------------------
+     * Refresh tblManageUser with most recent list of Login, SchoolStaff, and Student.
+     * @param evt 
+     */
+    private void btnRefreshUserTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshUserTableActionPerformed
+        //Instanced Variables
+        ArrayList<ArrayList<Object>> o = db.getAllUserInfo();   //Stores each User from DB
+        
+        for (int x = 0; x < o.size(); x++)
+        {
+            System.out.println("Testing..." + x);
+        }
+        
+    }//GEN-LAST:event_btnRefreshUserTableActionPerformed
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -742,6 +773,7 @@ public class AdminGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnAddNewCourse;
     private javax.swing.JButton btnAddNewUsers;
     private javax.swing.JButton btnNewRemoveUser;
+    private javax.swing.JButton btnRefreshUserTable;
     private javax.swing.JButton btnRemoveNewCourse;
     private javax.swing.JButton btnSubmitNewCourses;
     private javax.swing.JButton btnSubmitNewUsers;

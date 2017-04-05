@@ -92,3 +92,4 @@ CREATE TABLE Assignment
     PRIMARY KEY (DocumentNo, StudentID)
 );
 
+SELECT login.UserID, login.Username,
