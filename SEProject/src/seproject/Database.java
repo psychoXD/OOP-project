@@ -178,7 +178,7 @@ public class Database {
                 {
                     preparedStatement = 
                             connect.prepareStatement("SELECT * FROM Student "
-                                    + "WHERE StaffID=?");
+                                    + "WHERE StudentID=?");
                     preparedStatement.setInt(1, uID);
                     resultSet = preparedStatement.executeQuery();
                     
@@ -209,9 +209,9 @@ public class Database {
      * changeUserPwd(String, char [])
      * --------------------------------------------
      * Changes User Password and Salt from Login Table.
-     * @param Username
-     * @param pwd
-     * @return 
+     * @param username
+     * @param pwd 
+     * @throws java.security.NoSuchAlgorithmException 
      */
     public void changeUserPwd(String username, char [] pwd) throws NoSuchAlgorithmException
     {
@@ -236,6 +236,161 @@ public class Database {
             //return false;
         }
     }
+    
+    /**
+     * createUser()
+     * --------------------------------
+     * Create new User to Login Table and in either Student Table or SchoolStaff
+     * Table, depending on the size of the object.
+     * @param size
+     * @param o
+     * @throws java.security.NoSuchAlgorithmException
+     */
+    public void createUser(int size, Object[] o) throws NoSuchAlgorithmException
+    {
+        String firstName = (String)o[0];   //First Name of User
+        String lastName = (String)o[1];    //Last Name of User
+        String username = createUsername(lastName + firstName.charAt(0));    //Holds Username
+        
+        if (username == null)
+        {
+            //Dummy if statement//
+        }
+        else
+        {
+            byte [] salt = new PasswordHashing().createSalt();  //Holds Password Salt
+            String hashPwd =  new PasswordHashing().getHash(firstName.concat(lastName),salt);    //Holds Hashed pwd
+
+            if (size == 4) //New User is Staff
+            {
+                try
+                {
+                    String position = (String)o[2];
+                    String department = (String)o[3];
+                    int id = 0;
+
+                    //Preparing SQL Statement for Login (Staff User)
+                    preparedStatement = connect.
+                        prepareStatement("INSERT INTO Login "
+                                + "(Username, Password, pwdSalt, Role ) "
+                                + "VALUES (?,?,?,?)");
+                    preparedStatement.setString(1, username);
+                    preparedStatement.setString(2, hashPwd);
+                    preparedStatement.setBytes(3, salt);
+                    preparedStatement.setString(4, "Staff");
+                    preparedStatement.executeUpdate();
+                    
+                     //Getting User ID
+                    preparedStatement = connect.prepareStatement("SELECT* FROM Login WHERE Username=?");
+                    preparedStatement.setString(1, username);
+                    resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next())
+                    {
+                        id = resultSet.getInt("UserID");
+                    }
+
+                    //Inserting New Staff User information to SchoolStaff Table
+                    preparedStatement = 
+                            connect.prepareStatement("INSERT INTO SchoolStaff "
+                                    + "(StaffID, FirstName, LastName, Position, Department) "
+                                    + "VALUES (?,?,?,?,?)");
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setString(2, firstName);
+                    preparedStatement.setString(3, lastName);
+                    preparedStatement.setString(4, position);
+                    preparedStatement.setString(5, department);
+                    preparedStatement.executeUpdate();
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Error Inserting/Creating Staff User Account: " + e);
+                }
+
+            }
+            else if (size == 2) //New User is Student
+            {
+                try
+                {
+                    int id = 0;
+
+                    //Preparing SQL Statement for Login (Student User)
+                    preparedStatement = connect.
+                        prepareStatement("INSERT INTO Login "
+                                + "(Username, Password, pwdSalt, Role) "
+                                + "VALUES (?,?,?,?)");
+                    preparedStatement.setString(1, username);
+                    preparedStatement.setString(2, hashPwd);
+                    preparedStatement.setBytes(3, salt);
+                    preparedStatement.setString(4, "Student");
+                    preparedStatement.executeUpdate();
+                    
+                     //Getting User ID
+                    preparedStatement = connect.prepareStatement("SELECT UserID FROM Login WHERE Username =?");
+                    preparedStatement.setString(1,  username);
+                    resultSet = preparedStatement.executeQuery();
+
+                    if (resultSet.next())
+                    {
+                        id = resultSet.getInt("UserID");
+                    }
+
+                    //Inserting New Student User information to Student Table
+                    preparedStatement = 
+                            connect.prepareStatement("INSERT INTO Student "
+                                    + "(StudentID, FirstName, LastName) "
+                                    + "VALUES (?,?,?)");
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setString(2, firstName);
+                    preparedStatement.setString(3, lastName);
+                    preparedStatement.executeUpdate();
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Error Inserting/Creating Student User Account: " + e);
+                }
+            }
+        }
+    }
+    
+    /**
+     * createUsername(String s)
+     * -----------------------------------
+     * Creates Username for Login information based on First Name, Last Name,
+     * and the # of occurrences of LastName+FirstName of UserName.
+     * @param s
+     * @return 
+     */
+    private String createUsername (String s)
+    {
+        String username = s;
+        
+        try
+        {
+            preparedStatement = connect.
+                    prepareStatement("SELECT COUNT(*) FROM Login "
+                            + "WHERE Username LIKE ?");
+            preparedStatement.setString(1, "\"%"+ s + "%\"");
+            
+            resultSet = preparedStatement.executeQuery();
+            
+            if (resultSet.next())
+            {
+                int num = resultSet.getInt(1);
+                username += (num+1);
+                return username;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error creating Username: " + e);
+            return null;
+        }
+    }   
     
     /**
      * getSalt(String uName)
@@ -267,7 +422,7 @@ public class Database {
             System.out.println("Error getting salt: " + e);
             return null;
         }
-    } 
+    }
     
     /**
      * createAdmin()

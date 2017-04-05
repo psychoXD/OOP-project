@@ -13,23 +13,26 @@ public class StaffGUI extends javax.swing.JFrame {
     
     //Declared Member Variables
     private Staff user;  //Holds User class of current User
+    private Database db;
 
     /**
      * Creates new form StaffGUI
      */
     public StaffGUI() {
+        db = new Database();
         initComponents();
     }
 
     /**
-     * StaffGUI(User user)
+     * StaffGUI(User user, Database db)
      * ------------------------------
-     * StaffUI Constructor with 1 constructor.
+     * StaffUI Constructor with 2 constructor.
      * @param user 
      */
-    public StaffGUI(User user) {
+    public StaffGUI(User user, Database db) {
         initComponents();
         this.user = (Staff)user;
+        this.db = db;
         
         if (this.user.getPosition().equals("Database Administrator"))
         {
@@ -157,7 +160,7 @@ public class StaffGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdminManageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminManageActionPerformed
-        AdminGUI gui = new AdminGUI();
+        AdminGUI gui = new AdminGUI(this,db);
         gui.setVisible(true);
     }//GEN-LAST:event_btnAdminManageActionPerformed
 
