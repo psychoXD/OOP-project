@@ -57,6 +57,7 @@ public class AdminGUI extends javax.swing.JFrame {
         tblAddNewCourses = new javax.swing.JTable();
         btnAddNewCourse = new javax.swing.JButton();
         btnRemoveNewCourse = new javax.swing.JButton();
+        btnSubmitNewCourses = new javax.swing.JButton();
         pnlManageUsers = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
 
@@ -172,6 +173,13 @@ public class AdminGUI extends javax.swing.JFrame {
             }
         });
 
+        btnSubmitNewCourses.setText("Submit New Courses");
+        btnSubmitNewCourses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitNewCoursesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlAddClassesLayout = new javax.swing.GroupLayout(pnlAddClasses);
         pnlAddClasses.setLayout(pnlAddClassesLayout);
         pnlAddClassesLayout.setHorizontalGroup(
@@ -182,8 +190,9 @@ public class AdminGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnAddNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRemoveNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                    .addComponent(btnRemoveNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSubmitNewCourses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlAddClassesLayout.setVerticalGroup(
             pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,6 +203,8 @@ public class AdminGUI extends javax.swing.JFrame {
                         .addComponent(btnAddNewCourse)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnRemoveNewCourse)
+                        .addGap(53, 53, 53)
+                        .addComponent(btnSubmitNewCourses)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addContainerGap())
@@ -205,7 +216,7 @@ public class AdminGUI extends javax.swing.JFrame {
         pnlManageUsers.setLayout(pnlManageUsersLayout);
         pnlManageUsersLayout.setHorizontalGroup(
             pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 985, Short.MAX_VALUE)
+            .addGap(0, 998, Short.MAX_VALUE)
         );
         pnlManageUsersLayout.setVerticalGroup(
             pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,7 +229,7 @@ public class AdminGUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 985, Short.MAX_VALUE)
+            .addGap(0, 998, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,7 +244,7 @@ public class AdminGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1006, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -468,7 +479,7 @@ public class AdminGUI extends javax.swing.JFrame {
     /**
      * btnAddNewCourse Action Performed
      * --------------------------------------------------------
-     * Submits Courses with appropriate fields to Class Table.
+     * Adds New Row to tblAddNewCourses.
      * @param evt 
      */
     private void btnAddNewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewCourseActionPerformed
@@ -477,9 +488,11 @@ public class AdminGUI extends javax.swing.JFrame {
         String roomNo;  //Holds Class Room No.
         String time;    //Holds Class Time in String (temp)
         String day; //Holds Days (ex. MW = Monday & Wednesday)
+        int id; //Holds selected staffID
         ArrayList<Integer> staffID = db.getAllProfessorID();    //Holds Staff teaching course/class
         int sizeOfTable = tblAddNewCourses.getRowCount();   //Holds current size of table (based on rows)
         JComboBox staffIDList = new JComboBox();    //Stores JComboBox of Teacher ID
+        //JComboBox daysList = new JComboBox();   //Stores JComboBox of Class Days
         
         //Fill JCombo Box with Staff ID
         for (int x = 0; x < staffID.size(); x++)
@@ -501,13 +514,16 @@ public class AdminGUI extends javax.swing.JFrame {
             roomNo = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 1);
             time = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 2);
             day = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 3);
+            Object o = (Object)tblAddNewCourses.getValueAt(sizeOfTable-1, 4);
             
-            if ( !(courseID == null || roomNo == null))
+            if ( !(courseID == null || roomNo == null || time == null || day == null || o == null ))
             {
-                if (!(courseID.equals("") || roomNo.equals("")))
+                id = (int)o;
+                
+                if (!(courseID.equals("") || roomNo.equals("") ||time.equals("") || day.equals("")))
                 {
                     DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
-                    model.addRow(new Object[]{null,null,null,null} );
+                    model.addRow(new Object[]{null,null,null,null,null} );
                 }
                 else
                 {
@@ -538,6 +554,16 @@ public class AdminGUI extends javax.swing.JFrame {
             model.removeRow(selectedRow);
         }
     }//GEN-LAST:event_btnRemoveNewCourseActionPerformed
+
+    /**
+     * btnSubmitNewCourses
+     * ---------------------------------------------
+     * Submits Courses with appropriate fields to Classes Table.
+     * @param evt 
+     */
+    private void btnSubmitNewCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitNewCoursesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSubmitNewCoursesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -579,6 +605,7 @@ public class AdminGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnAddNewUsers;
     private javax.swing.JButton btnNewRemoveUser;
     private javax.swing.JButton btnRemoveNewCourse;
+    private javax.swing.JButton btnSubmitNewCourses;
     private javax.swing.JButton btnSubmitNewUsers;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
