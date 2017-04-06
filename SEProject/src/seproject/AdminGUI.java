@@ -62,6 +62,7 @@ public class AdminGUI extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblManageUsers = new javax.swing.JTable();
         btnRefreshUserTable = new javax.swing.JButton();
+        btnModifyUsers = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -226,9 +227,16 @@ public class AdminGUI extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane3.setViewportView(tblManageUsers);
@@ -240,6 +248,13 @@ public class AdminGUI extends javax.swing.JFrame {
             }
         });
 
+        btnModifyUsers.setText("Modify");
+        btnModifyUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyUsersActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlManageUsersLayout = new javax.swing.GroupLayout(pnlManageUsers);
         pnlManageUsers.setLayout(pnlManageUsersLayout);
         pnlManageUsersLayout.setHorizontalGroup(
@@ -248,7 +263,9 @@ public class AdminGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnRefreshUserTable, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRefreshUserTable, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(btnModifyUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         pnlManageUsersLayout.setVerticalGroup(
@@ -258,6 +275,8 @@ public class AdminGUI extends javax.swing.JFrame {
                 .addGroup(pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlManageUsersLayout.createSequentialGroup()
                         .addComponent(btnRefreshUserTable)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifyUsers)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addContainerGap())
@@ -726,13 +745,63 @@ public class AdminGUI extends javax.swing.JFrame {
     private void btnRefreshUserTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshUserTableActionPerformed
         //Instanced Variables
         ArrayList<ArrayList<Object>> o = db.getAllUserInfo();   //Stores each User from DB
+        DefaultTableModel model = (DefaultTableModel)tblManageUsers.getModel();
+        model.setRowCount(0); //Reset Table to 0
         
         for (int x = 0; x < o.size(); x++)
         {
-            System.out.println("Testing..." + x);
+            int size = o.get(x).size();
+            
+            
+            if (size == 4)
+            {
+                model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), null, null} );
+            }
+            else
+            {
+                model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5)} );
+            }
+        }
+    }//GEN-LAST:event_btnRefreshUserTableActionPerformed
+
+    /**
+     * btnModifyUsers Action Performed
+     * -----------------------------------------
+     * 
+     * @param evt 
+     */
+    private void btnModifyUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyUsersActionPerformed
+        
+        String position = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);
+        String department = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);
+        Object [] o;    //Holds User information
+        
+        if(position == null && department == null) //Editing Student Information
+        {
+            o = new Object[4];
+            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);
+            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);
+            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);
+            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);
+            
+            AdminModifyUser g = new AdminModifyUser(db,o);
+            g.setVisible(true);
+        }
+        else //Editing Teacher
+        {
+            o = new Object[6];
+            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);
+            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);
+            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);
+            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);
+            o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);
+            o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);
+            
+            AdminModifyUser g = new AdminModifyUser(db,o);
+            g.setVisible(true);
         }
         
-    }//GEN-LAST:event_btnRefreshUserTableActionPerformed
+    }//GEN-LAST:event_btnModifyUsersActionPerformed
 
     /**
      * @param args the command line arguments
@@ -772,6 +841,7 @@ public class AdminGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNewCourse;
     private javax.swing.JButton btnAddNewUsers;
+    private javax.swing.JButton btnModifyUsers;
     private javax.swing.JButton btnNewRemoveUser;
     private javax.swing.JButton btnRefreshUserTable;
     private javax.swing.JButton btnRemoveNewCourse;

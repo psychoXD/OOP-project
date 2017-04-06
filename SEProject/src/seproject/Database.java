@@ -461,14 +461,14 @@ public class Database {
                                 ("SELECT FirstName, LastName, Position, Department FROM SchoolStaff WHERE StaffID= ? AND Position =?");
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, "Teacher");
-                    resultSet = preparedStatement.executeQuery();
+                    ResultSet r = preparedStatement.executeQuery();
                     
-                    if (resultSet.next())
+                    if (r.next())
                     {
-                        firstName = resultSet.getString("FirstName");
-                        lastName = resultSet.getString("LastName");
-                        position = resultSet.getString("Position");
-                        department = resultSet.getString("Department");
+                        firstName = r.getString("FirstName");
+                        lastName = r.getString("LastName");
+                        position = r.getString("Position");
+                        department = r.getString("Department");
                         
                         temp.add(firstName);
                         temp.add(lastName);
@@ -484,12 +484,12 @@ public class Database {
                             connect.prepareStatement
                                 ("SELECT FirstName, LastName FROM Student WHERE StudentID= ?");
                     preparedStatement.setInt(1, id);
-                    resultSet = preparedStatement.executeQuery();
+                    ResultSet r = preparedStatement.executeQuery();
                     
-                    if (resultSet.next())
+                    if (r.next())
                     {
-                        firstName = resultSet.getString("FirstName");
-                        lastName = resultSet.getString("LastName");
+                        firstName = r.getString("FirstName");
+                        lastName = r.getString("LastName");
                         
                         temp.add(firstName);
                         temp.add(lastName);
@@ -497,13 +497,7 @@ public class Database {
                         o.add(temp);
                     }
                 }
-                
-                for (int a = 0; a < o.size(); a++)
-                {
-                    System.out.println(o.get(a).size() + "\ntemp");
-                }
             }
-            
             return o;
         }
         catch (Exception e)
