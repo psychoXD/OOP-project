@@ -5,6 +5,7 @@
  */
 package seproject;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -65,6 +66,11 @@ public class AdminGUI extends javax.swing.JFrame {
         btnModifyUsers = new javax.swing.JButton();
         btnRemoveUser = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblManageCourses = new javax.swing.JTable();
+        btnRefreshCourses = new javax.swing.JButton();
+        btnModifyCourse = new javax.swing.JButton();
+        btnRemoveTblCourse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Administrator GUI");
@@ -295,15 +301,80 @@ public class AdminGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Manage Users", pnlManageUsers);
 
+        tblManageCourses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Section No.", "Course ID", "Room No.", "Start Time", "End Time", "Class Days", "Staff ID"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tblManageCourses);
+
+        btnRefreshCourses.setText("Refresh");
+        btnRefreshCourses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshCoursesActionPerformed(evt);
+            }
+        });
+
+        btnModifyCourse.setText("Modify");
+        btnModifyCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyCourseActionPerformed(evt);
+            }
+        });
+
+        btnRemoveTblCourse.setText("Remove");
+        btnRemoveTblCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveTblCourseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 998, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRefreshCourses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModifyCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveTblCourse, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnRefreshCourses)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifyCourse)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemoveTblCourse)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Manage Courses", jPanel1);
@@ -787,29 +858,32 @@ public class AdminGUI extends javax.swing.JFrame {
         String department = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);
         Object [] o;    //Holds User information
         
-        if(position == null && department == null) //Editing Student Information
+        if (tblManageUsers.getRowCount() != 0)
         {
-            o = new Object[4];
-            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //UserID
-            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
-            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
-            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
-            
-            AdminModifyUser g = new AdminModifyUser(db,o);
-            g.setVisible(true);
-        }
-        else //Editing Teacher
-        {
-            o = new Object[6];
-            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //User ID
-            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
-            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
-            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
-            o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);   //Position
-            o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);   //Department
-            
-            AdminModifyUser g = new AdminModifyUser(db,o);
-            g.setVisible(true);
+            if(position == null && department == null) //Editing Student Information
+            {
+                o = new Object[4];
+                o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //UserID
+                o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
+                o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
+                o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
+
+                AdminModifyUser g = new AdminModifyUser(db,o);
+                g.setVisible(true);
+            }
+            else //Editing Teacher
+            {
+                o = new Object[6];
+                o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //User ID
+                o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
+                o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
+                o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
+                o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);   //Position
+                o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);   //Department
+
+                AdminModifyUser g = new AdminModifyUser(db,o);
+                g.setVisible(true);
+            }
         }
         
     }//GEN-LAST:event_btnModifyUsersActionPerformed
@@ -840,6 +914,80 @@ public class AdminGUI extends javax.swing.JFrame {
             }
         } 
     }//GEN-LAST:event_btnRemoveUserActionPerformed
+
+    /**
+     * btnRefreshCourses Action Performed
+     * -----------------------------------------------
+     * Refresh tblManageCourses with most recent courses in database.
+     * @param evt 
+     */
+    private void btnRefreshCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshCoursesActionPerformed
+        //Instanced Variables
+        ArrayList<ArrayList<Object>> o = db.getAllCourses();   //Stores each User from DB
+        DefaultTableModel model = (DefaultTableModel)tblManageCourses.getModel();
+        model.setRowCount(0); //Reset Table to 0
+        
+        for (int x = 0; x < o.size(); x++)
+        {
+            int size = o.get(x).size();
+            
+            model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5),o.get(x).get(6)} );
+            
+        }
+    }//GEN-LAST:event_btnRefreshCoursesActionPerformed
+
+    /**
+     * btnModifyCourse Action Performed
+     * -----------------------------------------
+     * Opens up JFrame that allows modification to selected course.
+     * @param evt 
+     */
+    private void btnModifyCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyCourseActionPerformed
+        Object [] o;    //Holds User information
+        
+        if (tblManageCourses.getRowCount() != 0)
+        {
+            o = new Object[7];
+            o[0] = (int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 0);  //Section No.
+            o[1] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 1);   //Course ID
+            o[2] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 2);   //Room No.
+            o[3] = (Time)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 3);   //Start Class Time
+            o[4] = (Time)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 4); //End Class Time
+            o[5] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 5);   //Class Days
+            o[6] = (int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 6);  //Staff ID
+
+            AdminModifyCourse g = new AdminModifyCourse(db,o);
+            g.setVisible(true);
+        }
+    }//GEN-LAST:event_btnModifyCourseActionPerformed
+
+    /**
+     * btnRemoveTblCourse Action Performed
+     * -----------------------------------------------
+     * 
+     * @param evt 
+     */
+    private void btnRemoveTblCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTblCourseActionPerformed
+        
+        //Instanced Member Variable
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+        int result = JOptionPane.showConfirmDialog 
+            (null, "Are you sure you want to remove course?","Warning",dialogButton);
+        
+        if (result == JOptionPane.YES_OPTION)
+        {
+            if(db.deleteCourse((int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 0))) //Delete Successful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was successful.","Delete Successful",
+                                        JOptionPane.DEFAULT_OPTION);
+            }
+            else //Delete Unsuccessful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was unsuccessful.","Delete Failed",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnRemoveTblCourseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -879,10 +1027,13 @@ public class AdminGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNewCourse;
     private javax.swing.JButton btnAddNewUsers;
+    private javax.swing.JButton btnModifyCourse;
     private javax.swing.JButton btnModifyUsers;
     private javax.swing.JButton btnNewRemoveUser;
+    private javax.swing.JButton btnRefreshCourses;
     private javax.swing.JButton btnRefreshUserTable;
     private javax.swing.JButton btnRemoveNewCourse;
+    private javax.swing.JButton btnRemoveTblCourse;
     private javax.swing.JButton btnRemoveUser;
     private javax.swing.JButton btnSubmitNewCourses;
     private javax.swing.JButton btnSubmitNewUsers;
@@ -890,12 +1041,14 @@ public class AdminGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel pnlAddClasses;
     private javax.swing.JPanel pnlAddUser;
     private javax.swing.JPanel pnlManageUsers;
     private javax.swing.JTable tblAddNewCourses;
     private javax.swing.JTable tblAddUser;
+    private javax.swing.JTable tblManageCourses;
     private javax.swing.JTable tblManageUsers;
     // End of variables declaration//GEN-END:variables
 }

@@ -363,6 +363,20 @@ public class Database {
         return false;
     }
     
+    /**
+     * createNewCourse(Object [] o)
+     * -------------------------------------------
+     * Inserts a new Class/Course to the Class entity in the database
+     * by unpacking its contents from the Object array.
+     * o[0] = CourseID
+     * o[1] = Room No.
+     * o[2] = ClassBeginTime
+     * o[3] = ClassEndTime
+     * o[4] = ClassDays
+     * o[5] = StaffID
+     * @param o
+     * @return 
+     */
     public boolean createNewCourse(Object [] o)
     {
         try
@@ -398,6 +412,12 @@ public class Database {
         }
     }
     
+    /**
+     * getAllProfessorID()
+     * --------------------------------
+     * Returns an ArrayList<Integer> with all UserID of every teacher/professor.
+     * @return 
+     */
     public ArrayList<Integer> getAllProfessorID()
     {
         try
@@ -426,6 +446,13 @@ public class Database {
         }
     }
     
+    /**
+     * getAllUserInfo()
+     * -------------------------------
+     * Returns an ArrayList<ArrayList<Object>> with the inner object array containing
+     * information of either a student user or staff user from the Login entity.
+     * @return 
+     */
     public ArrayList<ArrayList<Object>> getAllUserInfo()
     {
         try
@@ -507,6 +534,13 @@ public class Database {
         }
     }
     
+    /**
+     * updateUserInfo(Object [] o)
+     * ----------------------------------------------
+     * 
+     * @param o
+     * @return 
+     */
     public boolean updateUserInfo(Object [] o)
     {
         try
@@ -559,6 +593,62 @@ public class Database {
         }
     }
     
+    /**
+     * updateCourse(Object [] o)
+     * ----------------------------------------
+     * 
+     * @param o
+     * @return 
+     */
+    public boolean updateCourseInfo(Object [] o)
+    {
+        try
+        {
+            DateFormat formatter = new SimpleDateFormat("HH:mm");
+            
+            int SectionNo = (int)o[0];
+            String CourseID = (String)o[1];
+            String RoomNo = (String)o[2];
+            Time classBeginTime = (Time)o[3];
+            Time classEndTime = (Time)o[4];
+            String classDays = (String)o[5];
+            int StaffID = (int)o[6];
+            
+            preparedStatement = connect.
+                    prepareStatement("UPDATE Class class "
+                            + "SET class.CourseID=?, "
+                            + "class.RoomNo=?, "
+                            + "class.ClassBeginTime=?, "
+                            + "class.ClassEndTime=?, "
+                            + "class.ClassDays=?, "
+                            + "class.UserID=? "
+                            + "WHERE class.SectionNo=?");
+            preparedStatement.setString(1, CourseID);
+            preparedStatement.setString(2, RoomNo);
+            preparedStatement.setTime(3, classBeginTime);
+            preparedStatement.setTime(4, classEndTime);
+            preparedStatement.setString(5, classDays);
+            preparedStatement.setInt(6, StaffID);
+            preparedStatement.setInt(7, SectionNo);
+            
+            preparedStatement.executeUpdate();
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Updating Course Information: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * deleteUser(int id)
+     * ---------------------------------------------
+     * Delete currently selected users by the Administrator.
+     * @param id
+     * @return 
+     */
     public boolean deleteUser(int id)
     {
         try
@@ -575,6 +665,91 @@ public class Database {
             System.out.println("Error Deleting User: " + e);
             return false;
         }
+    }
+    
+    
+    /**
+     * deleteCourse(int id)
+     * ---------------------------------------------
+     * Delete currently selected course by the Administrator.
+     * @param id
+     * @return 
+     */
+    public boolean deleteCourse(int id)
+    {
+        try
+        {
+            preparedStatement = connect
+                        .prepareStatement("DELETE FROM Class WHERE SectionNo=? ");
+                preparedStatement.setInt(1, id);
+                
+                preparedStatement.executeUpdate();
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Deleting Class/Course: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * getAllCourses()
+     * -------------------------------
+     * Returns an ArrayList<ArrayList<Object>> of every course available in 
+     * the entity Class from database.
+     * @return 
+     */
+    public ArrayList<ArrayList<Object>> getAllCourses()
+    {
+        try
+        {
+            ArrayList<ArrayList<Object> >o = new ArrayList<ArrayList<Object>>();    //Holds all Courses
+            
+            int sectionNo; //Holds current course SectionNo
+            String courseID = "";    //CourseID of Course
+            String roomNo = "";   //RoomNo course is held
+            Time classBeginTime;    //Time class starts
+            Time classEndTime;    //Time class ends
+            String classDays = "";  //Day(s) class is held on
+            int staffID;    //Holds Staff teaching class
+            ArrayList<Object> temp;
+            
+            //Getting User ID
+            preparedStatement = connect.prepareStatement("SELECT * FROM Class");
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                temp = new ArrayList<Object>();
+                
+                sectionNo = resultSet.getInt("SectionNo");
+                courseID = resultSet.getString("CourseID");
+                roomNo = resultSet.getString("RoomNo");
+                classBeginTime = resultSet.getTime("ClassBeginTime");
+                classEndTime = resultSet.getTime("ClassEndTime");
+                classDays = resultSet.getString("ClassDays");
+                staffID = resultSet.getInt("UserID");
+                
+                temp.add(sectionNo);
+                temp.add(courseID);
+                temp.add(roomNo);
+                temp.add(classBeginTime);
+                temp.add(classEndTime);
+                temp.add(classDays);
+                temp.add(staffID);
+                
+                o.add(temp); 
+            }
+            
+            return o;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving all Courses: " + e);
+            return null;
+        }
+        
     }
     
     /**

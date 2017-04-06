@@ -189,7 +189,7 @@ public class AdminModifyUser extends javax.swing.JFrame {
     /**
      * btnSubmitChanges Action Performed
      * --------------------------------------
-     * 
+     * Submits and updates user information.
      * @param evt 
      */
     private void btnSubmitChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitChangesActionPerformed
