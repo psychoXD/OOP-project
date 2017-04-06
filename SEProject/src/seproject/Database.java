@@ -163,7 +163,7 @@ public class Database {
                     
                     preparedStatement = 
                             connect.prepareStatement("SELECT * FROM SchoolStaff "
-                                    + "WHERE StaffID=?");
+                                    + "WHERE UserID=?");
                     preparedStatement.setInt(1, uID);
                     resultSet = preparedStatement.executeQuery();
                     
@@ -181,7 +181,7 @@ public class Database {
                 {
                     preparedStatement = 
                             connect.prepareStatement("SELECT * FROM Student "
-                                    + "WHERE StudentID=?");
+                                    + "WHERE UserID=?");
                     preparedStatement.setInt(1, uID);
                     resultSet = preparedStatement.executeQuery();
                     
@@ -298,7 +298,7 @@ public class Database {
                     //Inserting New Staff User information to SchoolStaff Table
                     preparedStatement = 
                             connect.prepareStatement("INSERT INTO SchoolStaff "
-                                    + "(StaffID, FirstName, LastName, Position, Department) "
+                                    + "(UserID, FirstName, LastName, Position, Department) "
                                     + "VALUES (?,?,?,?,?)");
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, firstName);
@@ -345,7 +345,7 @@ public class Database {
                     //Inserting New Student User information to Student Table
                     preparedStatement = 
                             connect.prepareStatement("INSERT INTO Student "
-                                    + "(StudentID, FirstName, LastName) "
+                                    + "(UserID, FirstName, LastName) "
                                     + "VALUES (?,?,?)");
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, firstName);
@@ -379,7 +379,7 @@ public class Database {
             //Preparing SQL Statement for Login (Student User)
             preparedStatement = connect.
                 prepareStatement("INSERT INTO Class "
-                        + "(CourseID, RoomNo, ClassBeginTime, ClassEndTime, ClassDays, StaffID) "
+                        + "(CourseID, RoomNo, ClassBeginTime, ClassEndTime, ClassDays, UserID) "
                         + "VALUES (?,?,?,?,?,?)");
             preparedStatement.setString(1, courseID);
             preparedStatement.setString(2, RoomNo);
@@ -406,13 +406,13 @@ public class Database {
             int id; //Holds current Teacher ID
             
             //Getting User ID
-            preparedStatement = connect.prepareStatement("SELECT StaffID FROM SchoolStaff WHERE Position =?");
+            preparedStatement = connect.prepareStatement("SELECT UserID FROM SchoolStaff WHERE Position =?");
             preparedStatement.setString(1, "Teacher");
             resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next())
             {
-                id = resultSet.getInt("StaffID");
+                id = resultSet.getInt("UserID");
                 l.add(id);
             }
             
@@ -458,7 +458,7 @@ public class Database {
                 {
                     preparedStatement = 
                             connect.prepareStatement
-                                ("SELECT FirstName, LastName, Position, Department FROM SchoolStaff WHERE StaffID= ? AND Position =?");
+                                ("SELECT FirstName, LastName, Position, Department FROM SchoolStaff WHERE UserID= ? AND Position =?");
                     preparedStatement.setInt(1, id);
                     preparedStatement.setString(2, "Teacher");
                     ResultSet r = preparedStatement.executeQuery();
@@ -482,7 +482,7 @@ public class Database {
                 {
                     preparedStatement = 
                             connect.prepareStatement
-                                ("SELECT FirstName, LastName FROM Student WHERE StudentID= ?");
+                                ("SELECT FirstName, LastName FROM Student WHERE UserID= ?");
                     preparedStatement.setInt(1, id);
                     ResultSet r = preparedStatement.executeQuery();
                     
@@ -504,6 +504,76 @@ public class Database {
         {
             System.out.println("Error retrieving all User information(getAllUser() function): " + e);
             return null;
+        }
+    }
+    
+    public boolean updateUserInfo(Object [] o)
+    {
+        try
+        {
+            int id = (int)o[0];
+            String username = (String)o[1];
+            String firstName = (String)o[2];
+            String lastName= (String)o[3];
+            
+            if (o.length == 4)  //Update to Student User
+            {
+                preparedStatement = connect
+                        .prepareStatement("UPDATE Student student " 
+                                + "SET student.FirstName=?, "
+                                + "student.LastName=? "
+                                + "WHERE student.UserID=?");
+                preparedStatement.setString(1, firstName);
+                preparedStatement.setString(2, lastName);
+                preparedStatement.setInt(3, id);
+                
+                preparedStatement.executeUpdate();
+            }
+            else    //Update Staff/Teacher User
+            {
+                String position = (String)o[4];
+                String department = (String)o[5];
+                
+                preparedStatement = connect
+                        .prepareStatement("UPDATE SchoolStaff staff " 
+                                + "SET staff.FirstName=?, "
+                                + "staff.LastName=?,"
+                                + "staff.Position=?."
+                                + "staff.Department=? "
+                                + "WHERE staff.UserID=?");
+                preparedStatement.setString(1, firstName);
+                preparedStatement.setString(2, lastName);
+                preparedStatement.setString(3, position);
+                preparedStatement.setString(4, department);
+                preparedStatement.setInt(5, id);
+                
+                preparedStatement.executeUpdate();
+            }
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Updating User Information: " + e);
+            return false;
+        }
+    }
+    
+    public boolean deleteUser(int id)
+    {
+        try
+        {
+            preparedStatement = connect
+                        .prepareStatement("DELETE FROM Login WHERE UserID=? ");
+                preparedStatement.setInt(1, id);
+                
+                preparedStatement.executeUpdate();
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Deleting User: " + e);
+            return false;
         }
     }
     
@@ -616,7 +686,7 @@ public class Database {
             //Inserting Admin information to SchoolStaff table
             preparedStatement = 
                     connect.prepareStatement("INSERT INTO SchoolStaff "
-                            + "(StaffID, FirstName, LastName, Position, Department) "
+                            + "(UserID, FirstName, LastName, Position, Department) "
                             + "VALUES (?,?,?,?, ?)");
             preparedStatement.setInt(1, id);
             preparedStatement.setString(2, "Admin");

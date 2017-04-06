@@ -5,6 +5,8 @@
  */
 package seproject;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author reticent
@@ -14,6 +16,7 @@ public class AdminModifyUser extends javax.swing.JFrame {
     //Private Declared Memeber Variables
     Database db;    //Database db
     Object [] o;    //Holds user information
+    boolean b;  //True = Student, False = Staff/Teacher
     
     /**
      * Creates new form AdminModifyUser
@@ -27,9 +30,10 @@ public class AdminModifyUser extends javax.swing.JFrame {
         this.o = o;
         initComponents();
         
-        if (o.length == 4)
+        if (o.length == 4)  //Student User
         {
             int i = (int)o[0];
+            b = true;
             
             lblPosition.setVisible(false);
             lblDepartment.setVisible(false);
@@ -42,9 +46,11 @@ public class AdminModifyUser extends javax.swing.JFrame {
             txtLastName.setText((String)o[3]);
         }
         
-        else
+        else    //Staff User
         {
             int i = (int)o[0];
+            b = false;
+            
             txtUserID.setText(Integer.toString(i));
             txtUsername.setText((String)o[1]);
             txtFirstName.setText((String)o[2]);
@@ -187,6 +193,127 @@ public class AdminModifyUser extends javax.swing.JFrame {
      * @param evt 
      */
     private void btnSubmitChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitChangesActionPerformed
+        //Instance Member Variables
+        Object temp [];    //Holds changed info (0 = FirstName, 1 = LastName, 2 = Position, 3 = Department)
+        int i = 0;
+        String firstName = null;
+        String lastName = null;
+        
+        
+        if (b == true) //If Student User
+        {   
+            if (!(txtFirstName.getText().equalsIgnoreCase((String)o[2]))) //Check if FirstName has changed
+            {
+                firstName = txtFirstName.getText();
+                i++;
+            }
+            else
+            {
+                firstName = (String)o[2];
+            }
+            
+            if (!(txtLastName.getText().equalsIgnoreCase((String)o[3]))) //Check if LastName has changed
+            {
+                lastName = txtLastName.getText();
+                i++;
+            }
+            else
+            {
+                lastName = (String)o[3];
+            }
+            
+            if (i != 0)
+            {
+                temp = new Object [4];
+                temp[0] = Integer.parseInt(txtUserID.getText()); 
+                temp[1] = txtUsername.getText();
+                temp[2] = firstName;
+                temp[3] = lastName;
+                
+                if(db.updateUserInfo(temp)) //Update Student User Was Successful
+                {
+                    JOptionPane.showMessageDialog(null, "Update was successful.","Update Success",
+                                        JOptionPane.DEFAULT_OPTION);
+                    this.dispose();
+                }
+                else    //Update Student User Was Unsuccessful
+                {
+                    JOptionPane.showMessageDialog(null, "Update was unsuccessful.","Update Failed",
+                                        JOptionPane.ERROR_MESSAGE);
+                    this.dispose();
+                }
+            }
+        }
+        else //else, Staff/Teacher User
+        {
+            String position = null;
+            String department = null;
+            
+            if (!(txtFirstName.getText().equalsIgnoreCase((String)o[2]))) //Check if FirstName has changed
+            {
+                firstName = txtFirstName.getText();
+                i++;
+            }
+            else
+            {
+                firstName = (String)o[2];
+            }
+            
+            if (!(txtLastName.getText().equalsIgnoreCase((String)o[3]))) //Check if LastName has changed
+            {
+                lastName = txtLastName.getText();
+                i++;
+            }
+            else
+            {
+                lastName = (String)o[3];
+            }
+            
+            if (!(txtPosition.getText().equalsIgnoreCase((String)o[4]))) //Check if Position has changed
+            {
+                position = txtFirstName.getText();
+                i++;
+            }
+            else
+            {
+                position = (String)o[4];
+            }
+            
+            if (!(txtDepartment.getText().equalsIgnoreCase((String)o[5]))) //Check if Department has changed
+            {
+                department = txtLastName.getText();
+                i++;
+            }
+            else
+            {
+                department = (String)o[5];
+            }
+            
+            if (i != 0)
+            {
+                temp = new Object [6];
+                temp[0] = Integer.parseInt(txtUserID.getText());
+                temp[1] = txtUsername.getText();
+                temp[2] = firstName;
+                temp[3] = lastName;
+                temp[4] = position;
+                temp[5] = department;
+                
+                if(db.updateUserInfo(temp)) //If Update Staff User Was Successful
+                {
+                    JOptionPane.showMessageDialog(null, "Update was successful.","Update Success",
+                                        JOptionPane.DEFAULT_OPTION);
+                    this.dispose();
+                }
+                else   //If Update Staff User Was Unsuccessful
+                {
+                    JOptionPane.showMessageDialog(null, "Update was unsuccessful.","Update Failed",
+                                        JOptionPane.ERROR_MESSAGE);
+                    this.dispose();
+                }
+                
+            }
+        }
         
     }//GEN-LAST:event_btnSubmitChangesActionPerformed
 

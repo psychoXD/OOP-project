@@ -63,6 +63,7 @@ public class AdminGUI extends javax.swing.JFrame {
         tblManageUsers = new javax.swing.JTable();
         btnRefreshUserTable = new javax.swing.JButton();
         btnModifyUsers = new javax.swing.JButton();
+        btnRemoveUser = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -255,6 +256,13 @@ public class AdminGUI extends javax.swing.JFrame {
             }
         });
 
+        btnRemoveUser.setText("Remove");
+        btnRemoveUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveUserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlManageUsersLayout = new javax.swing.GroupLayout(pnlManageUsers);
         pnlManageUsers.setLayout(pnlManageUsersLayout);
         pnlManageUsersLayout.setHorizontalGroup(
@@ -265,7 +273,8 @@ public class AdminGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnRefreshUserTable, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                    .addComponent(btnModifyUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnModifyUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
         pnlManageUsersLayout.setVerticalGroup(
@@ -277,6 +286,8 @@ public class AdminGUI extends javax.swing.JFrame {
                         .addComponent(btnRefreshUserTable)
                         .addGap(18, 18, 18)
                         .addComponent(btnModifyUsers)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemoveUser)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addContainerGap())
@@ -767,7 +778,7 @@ public class AdminGUI extends javax.swing.JFrame {
     /**
      * btnModifyUsers Action Performed
      * -----------------------------------------
-     * 
+     * Opens up JFrame that allows modification to selected user.
      * @param evt 
      */
     private void btnModifyUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyUsersActionPerformed
@@ -779,10 +790,10 @@ public class AdminGUI extends javax.swing.JFrame {
         if(position == null && department == null) //Editing Student Information
         {
             o = new Object[4];
-            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);
-            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);
-            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);
-            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);
+            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //UserID
+            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
+            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
+            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
             
             AdminModifyUser g = new AdminModifyUser(db,o);
             g.setVisible(true);
@@ -790,18 +801,45 @@ public class AdminGUI extends javax.swing.JFrame {
         else //Editing Teacher
         {
             o = new Object[6];
-            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);
-            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);
-            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);
-            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);
-            o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);
-            o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);
+            o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //User ID
+            o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
+            o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
+            o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
+            o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);   //Position
+            o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);   //Department
             
             AdminModifyUser g = new AdminModifyUser(db,o);
             g.setVisible(true);
         }
         
     }//GEN-LAST:event_btnModifyUsersActionPerformed
+
+    /**
+     * btnRemoveUser Action Performed
+     * -------------------------------------
+     * Removes currently selected user from the database.
+     * @param evt 
+     */
+    private void btnRemoveUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUserActionPerformed
+        //Instanced Member Variable
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+        int result = JOptionPane.showConfirmDialog 
+            (null, "Are you sure you want to remove user?","Warning",dialogButton);
+        
+        if (result == JOptionPane.YES_OPTION)
+        {
+            if(db.deleteUser((int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0))) //Delete Successful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was successful.","Delete Successful",
+                                        JOptionPane.DEFAULT_OPTION);
+            }
+            else //Delete Unsuccessful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was unsuccessful.","Delete Failed",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        } 
+    }//GEN-LAST:event_btnRemoveUserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -845,6 +883,7 @@ public class AdminGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnNewRemoveUser;
     private javax.swing.JButton btnRefreshUserTable;
     private javax.swing.JButton btnRemoveNewCourse;
+    private javax.swing.JButton btnRemoveUser;
     private javax.swing.JButton btnSubmitNewCourses;
     private javax.swing.JButton btnSubmitNewUsers;
     private javax.swing.JPanel jPanel1;
