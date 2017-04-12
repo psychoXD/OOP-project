@@ -35,6 +35,9 @@ public class AdminGUI extends javax.swing.JFrame {
         this.db = db;
         this.gui.setVisible(false); //StaffGUI becomes Hidden
         initComponents();
+        
+        btnRefreshCoursesActionPerformed(null);
+        btnRefreshUserTableActionPerformed(null);
     }
 
     /**
@@ -609,11 +612,13 @@ public class AdminGUI extends javax.swing.JFrame {
 
                     }
 
-                    if (x == sizeOfTable-1)
+                    if (x == sizeOfTable-1) //Reset Table row count
                     {
                         DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
                         model.setRowCount(0);
                     }
+                    
+                    btnRefreshUserTableActionPerformed(null); //Update User Table
                 }
 
             }
@@ -816,6 +821,8 @@ public class AdminGUI extends javax.swing.JFrame {
                    showMessageDialog(null, "New Courses Table is Empty!" ,
                             "Empty Table", JOptionPane.ERROR_MESSAGE);
        }
+       
+       btnRefreshCoursesActionPerformed(null);  //Update Course Table
     }//GEN-LAST:event_btnSubmitNewCoursesActionPerformed
 
     /**
