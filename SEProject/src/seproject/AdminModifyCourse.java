@@ -9,9 +9,11 @@ import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Position;
 
 /**
  *
@@ -88,6 +90,8 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         lstStudentInClass = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
+        txtUserID = new javax.swing.JTextField();
+        btnSearchUser = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Courses");
@@ -150,6 +154,13 @@ public class AdminModifyCourse extends javax.swing.JFrame {
 
         jLabel2.setText("Student In Course");
 
+        btnSearchUser.setText("Search User");
+        btnSearchUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchUserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,19 +191,26 @@ public class AdminModifyCourse extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRemoveStudent, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
-                            .addComponent(btnAddStudent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnRemoveStudent, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                                    .addComponent(btnAddStudent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(43, 43, 43))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSearchUser)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,7 +259,9 @@ public class AdminModifyCourse extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnSubmit)
-                            .addComponent(btnReset))
+                            .addComponent(btnReset)
+                            .addComponent(txtUserID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearchUser))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(91, 91, 91)
@@ -396,6 +416,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddStudentActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void btnRemoveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveStudentActionPerformed
 
         if (!lstStudentInClass.isSelectionEmpty())   //If there is a selection
@@ -417,6 +441,78 @@ public class AdminModifyCourse extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnRemoveStudentActionPerformed
+
+    /**
+     * 
+     * @param evt 
+     */
+    private void btnSearchUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchUserActionPerformed
+        
+        //Instanced Variables
+        int studentID = 0;
+        
+        try
+        {
+            studentID = Integer.parseInt(txtUserID.getText());  //Student ID (Checks if value is an integer)
+            boolean b1 = false;  //Flag for student (if found) in lstStudentNotInClass
+            boolean b2 = false; //Flag for student (if found) in lstStudentInClass
+            int i = 0;  //Holds selected row where student was found
+            
+            int t = lstStudentNotInClass.getModel().getSize(); //Size of lstStudentInClass
+            
+            if (t != 0) //If lstStudentNotInClass list is not empty
+            {
+                i = lstStudentNotInClass.getNextMatch(txtUserID.getText(), 0, Position.Bias.Forward);
+            
+                if (i != -1)    //if StudentID found in lstStudentNotInClass list
+                {
+                    lstStudentNotInClass.setSelectedValue(txtUserID.getText(), true); 
+                    b1 = true;
+                }
+            }
+            
+            t = lstStudentInClass.getModel().getSize(); //Size of lstStudentInClass
+                
+            if (t != 0 && b1 == false)  //If lstStudentInClass is not empty and ID not found in lstStudentNotInClass
+            {
+                i = 0;
+
+                i = lstStudentInClass.getNextMatch(txtUserID.getText(), 0, Position.Bias.Forward);
+                if (i != -1)
+                {
+                    lstStudentInClass.setSelectedValue(txtUserID.getText(), true);
+                    b2 = true;
+                }
+            }
+            
+            if (b1 == true && b2 == false)   //If student is found in lstStudentNotInClass table
+            {
+                lstStudentNotInClass.setSelectedIndex(i);
+            }
+            else if (b1 == false && b2 == true)    //If student is found in lstStudentNotInClass table
+            {
+                lstStudentInClass.setSelectedIndex(i);
+            }
+            else    //Student was not found in either table
+            {
+                throw new Exception();
+            }
+        }
+        catch(Exception e)
+        {
+            if (studentID == 0)
+            {
+                JOptionPane.showMessageDialog(null, "User ID Invalid.","Please input correct value (Numbers only)",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "User Not Found","Student ID(" + studentID + ") does not exist.",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnSearchUserActionPerformed
 
     
     /**
@@ -507,6 +603,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     private javax.swing.JButton btnAddStudent;
     private javax.swing.JButton btnRemoveStudent;
     private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnSearchUser;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -528,5 +625,6 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     private javax.swing.JTextField txtRoomNo;
     private javax.swing.JTextField txtSectionNo;
     private javax.swing.JTextField txtStaffID;
+    private javax.swing.JTextField txtUserID;
     // End of variables declaration//GEN-END:variables
 }
