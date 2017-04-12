@@ -834,7 +834,6 @@ public class AdminGUI extends javax.swing.JFrame {
         {
             int size = o.get(x).size();
             
-            
             if (size == 4)
             {
                 model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), null, null} );

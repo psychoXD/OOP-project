@@ -753,6 +753,124 @@ public class Database {
     }
     
     /**
+     * 
+     * @param sectionNo
+     * @return 
+     */
+    public ArrayList<Integer> getStudentIDNotInCourse(int sectionNo)
+    {
+        try
+        {
+            ArrayList<Integer> o = new ArrayList<Integer>();
+            
+            //Getting User ID
+            preparedStatement = connect.prepareStatement("SELECT * FROM Student WHERE UserID NOT IN "
+                    + "\n(SELECT UserID FROM Student_Class WHERE SectionNo =?)");
+            preparedStatement.setInt(1, sectionNo);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                o.add(resultSet.getInt("UserID"));
+            }
+            
+            return o;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving Student ID Not In Course: " + e);
+            return null;
+        }
+    }
+    
+    /**
+     * 
+     * @param sectionNo
+     * @return 
+     */
+    public ArrayList<Integer> getStudentIDInCourse(int sectionNo)
+    {
+        try
+        {
+            ArrayList<Integer> o = new ArrayList<Integer>();
+            
+            //Getting User ID
+            preparedStatement = connect.prepareStatement("SELECT * FROM Student WHERE UserID IN "
+                    + "\n(SELECT UserID FROM Student_Class WHERE SectionNo =?)");
+            preparedStatement.setInt(1, sectionNo);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                o.add(resultSet.getInt("UserID"));
+            }
+            
+            return o;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving Student ID Not In Course: " + e);
+            return null;
+        }
+    }
+    
+    /**
+     * 
+     * @param sectionNo
+     * @param studentID
+     * @return 
+     */
+    public boolean addStudentToCourse(int sectionNo , int studentID)
+    {
+        try
+        {
+            
+            //Preparing SQL Statement for Login (Student User)
+            preparedStatement = connect.
+                prepareStatement("INSERT INTO Student_Class "
+                        + "(UserID, SectionNo) "
+                        + "VALUES (?,?)");
+            preparedStatement.setInt(1, studentID);
+            preparedStatement.setInt(2, sectionNo);
+            preparedStatement.executeUpdate();
+            
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error adding Student ID Into Course: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * 
+     * @param sectionNo
+     * @param studentID
+     * @return 
+     */
+    public boolean removeStudentToCourse(int sectionNo , int studentID)
+    {
+        try
+        {
+            //Preparing SQL Statement for Login (Student User)
+            preparedStatement = connect.
+                prepareStatement("DELETE FROM Student_Class WHERE UserID =? AND SectionNo =?");
+            preparedStatement.setInt(1, studentID);
+            preparedStatement.setInt(2, sectionNo);
+            preparedStatement.executeUpdate();
+            
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error removing Student ID Into Course: " + e);
+            return false;
+        }
+    }
+    
+    /**
      * createUsername(String s)
      * -----------------------------------
      * Creates Username for Login information based on First Name, Last Name,

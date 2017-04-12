@@ -8,7 +8,10 @@ package seproject;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -47,6 +50,9 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         txtClassEndTime.setText(((Time)o[4]).toString());
         txtClassDays.setText((String)o[5]);
         txtStaffID.setText(Integer.toString((int)o[6]));
+        
+        fillStudentNotInClass();
+        fillStudentInClass();
     }
 
     /**
@@ -74,9 +80,18 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         txtClassEndTime = new javax.swing.JTextField();
         btnSubmit = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstStudentNotInClass = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        btnAddStudent = new javax.swing.JButton();
+        btnRemoveStudent = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstStudentInClass = new javax.swing.JList<>();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Manage Courses");
+        setResizable(false);
 
         lblSectionNo.setText("Section No:");
 
@@ -108,6 +123,33 @@ public class AdminModifyCourse extends javax.swing.JFrame {
             }
         });
 
+        lstStudentNotInClass.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(lstStudentNotInClass);
+
+        jLabel1.setText("Students Not In Course");
+
+        btnAddStudent.setText("Add Student");
+        btnAddStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddStudentActionPerformed(evt);
+            }
+        });
+
+        btnRemoveStudent.setText("Remove Student");
+        btnRemoveStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveStudentActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(lstStudentInClass);
+
+        jLabel2.setText("Student In Course");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -135,44 +177,78 @@ public class AdminModifyCourse extends javax.swing.JFrame {
                         .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnReset, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(537, Short.MAX_VALUE))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRemoveStudent, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                            .addComponent(btnAddStudent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSectionNo)
-                    .addComponent(txtSectionNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCourseID)
-                    .addComponent(txtCourseID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRoomNo)
-                    .addComponent(txtRoomNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblClassBeginTime)
-                    .addComponent(txtClassStartTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCourseID1)
-                    .addComponent(txtClassEndTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRoomNo1)
-                    .addComponent(txtClassDays, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblClassBeginTime1)
-                    .addComponent(txtStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSubmit)
-                    .addComponent(btnReset))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSectionNo)
+                            .addComponent(txtSectionNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblCourseID)
+                                    .addComponent(txtCourseID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblRoomNo)
+                                    .addComponent(txtRoomNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblClassBeginTime)
+                                    .addComponent(txtClassStartTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblCourseID1)
+                                    .addComponent(txtClassEndTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblRoomNo1)
+                                    .addComponent(txtClassDays, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblClassBeginTime1)
+                                    .addComponent(txtStaffID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSubmit)
+                            .addComponent(btnReset))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addComponent(btnAddStudent)
+                        .addGap(38, 38, 38)
+                        .addComponent(btnRemoveStudent)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -294,6 +370,105 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
+     * 
+     * @param evt 
+     */
+    private void btnAddStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStudentActionPerformed
+        
+        if (!lstStudentNotInClass.isSelectionEmpty())   //If there is a selection
+        {
+            int studentID = Integer.parseInt(String.valueOf(lstStudentNotInClass.getSelectedValue()));    //Student ID
+            int sectionNo = Integer.parseInt(txtSectionNo.getText());   //Section No.
+
+            
+            if (db.addStudentToCourse(sectionNo, studentID))    //Success
+            {
+                JOptionPane.showMessageDialog(null, "Update was successful.","Student added to course",
+                                        JOptionPane.ERROR_MESSAGE);
+                fillStudentNotInClass();
+                fillStudentInClass();
+            }
+            else    //Unsuccessful
+            {
+                JOptionPane.showMessageDialog(null, "Update was unsuccessful.","Could not add student to class.",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnAddStudentActionPerformed
+
+    private void btnRemoveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveStudentActionPerformed
+
+        if (!lstStudentInClass.isSelectionEmpty())   //If there is a selection
+        {
+            int studentID = Integer.parseInt(String.valueOf(lstStudentInClass.getSelectedValue()));    //Student ID
+            int sectionNo = Integer.parseInt(txtSectionNo.getText());   //Section No.
+
+            if (db.removeStudentToCourse(sectionNo, studentID))    //Success
+            {
+                JOptionPane.showMessageDialog(null, "Update was successful.","Student removed from course",
+                    JOptionPane.ERROR_MESSAGE);
+                fillStudentNotInClass();
+                fillStudentInClass();
+            }
+            else    //Unsuccessful
+            {
+                JOptionPane.showMessageDialog(null, "Update was unsuccessful.","Could not remove student from class.",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnRemoveStudentActionPerformed
+
+    
+    /**
+     * 
+     */
+    private void fillStudentNotInClass()
+    {
+        try
+        {
+            //Instanced Variables
+            ArrayList<Integer> o = db.getStudentIDNotInCourse(Integer.parseInt(txtSectionNo.getText()));   //Stores each User from DB
+            DefaultListModel model = new DefaultListModel();
+            
+            for (int x = 0; x < o.size(); x++)
+            {
+                model.addElement(o.get(x));
+            }
+            
+            lstStudentNotInClass.setModel(model);
+        }
+        catch(Exception e)
+        {
+            
+        }
+    }
+    
+    /**
+     * 
+     */
+    private void fillStudentInClass()
+    {
+        try
+        {
+            //Instanced Variables
+            ArrayList<Integer> o = db.getStudentIDInCourse(Integer.parseInt(txtSectionNo.getText()));   //Stores each User from DB
+            DefaultListModel model = new DefaultListModel();
+            
+            for (int x = 0; x < o.size(); x++)
+            {
+                model.addElement(o.get(x));
+            }
+            
+            lstStudentInClass.setModel(model);
+        }
+        catch(Exception e)
+        {
+            
+        }
+    }
+    
+    
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -329,8 +504,14 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddStudent;
+    private javax.swing.JButton btnRemoveStudent;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSubmit;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblClassBeginTime;
     private javax.swing.JLabel lblClassBeginTime1;
     private javax.swing.JLabel lblCourseID;
@@ -338,6 +519,8 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     private javax.swing.JLabel lblRoomNo;
     private javax.swing.JLabel lblRoomNo1;
     private javax.swing.JLabel lblSectionNo;
+    private javax.swing.JList<String> lstStudentInClass;
+    private javax.swing.JList<String> lstStudentNotInClass;
     private javax.swing.JTextField txtClassDays;
     private javax.swing.JTextField txtClassEndTime;
     private javax.swing.JTextField txtClassStartTime;
