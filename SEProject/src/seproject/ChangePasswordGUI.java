@@ -14,10 +14,24 @@ import javax.swing.JOptionPane;
  */
 public class ChangePasswordGUI extends javax.swing.JFrame {
 
+    //Declared Member Variable
+    private Database db;    //Database db
+    
     /**
      * Creates new form ChangePasswordGUI
      */
     public ChangePasswordGUI() {
+        db = new Database();
+        initComponents();
+    }
+    
+    /**
+     * ChangePasswordGUI(Database) Constructor
+     * ----------------------------------------------
+     * ChangePasswordGUI Constructor with 1 parameter.
+     */
+    public ChangePasswordGUI(Database db) {
+        this.db = db;
         initComponents();
     }
 
@@ -183,7 +197,6 @@ public class ChangePasswordGUI extends javax.swing.JFrame {
     private void btnChangePwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePwdActionPerformed
         
         //Instanced Variable
-        Database db = new Database();   //Database
         String username = txtUsername.getText();    //Username
         char [] oldPwd = txtOldPwd.getPassword();   //Old Password
         char [] newPwd = txtNewPwd.getPassword();   //New Password

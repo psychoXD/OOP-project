@@ -13,6 +13,9 @@ import javax.swing.*;
  */
 public class LoginMenu extends javax.swing.JFrame {
 
+    //Declared Member Vairables 
+    private Database db = new Database();
+    
     /**
      * Creates new form LoginMenu
      */
@@ -126,7 +129,7 @@ public class LoginMenu extends javax.swing.JFrame {
     * Information (Admin, Teacher, and Student).
     */
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        Database db = new Database();
+        db = new Database();
         
         if (db.checkLogin(txtUsername.getText(), txtPassword.getPassword()))
         {
@@ -135,7 +138,7 @@ public class LoginMenu extends javax.swing.JFrame {
             
             if(typeOfClass.equals("Staff")) //If user is a Staff
             {
-                StaffGUI gui = new StaffGUI(user);
+                StaffGUI gui = new StaffGUI(user,db);
                 gui.setVisible(true);
                 this.dispose();
             }
@@ -160,7 +163,7 @@ public class LoginMenu extends javax.swing.JFrame {
      * @param evt 
      */
     private void btnChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePasswordActionPerformed
-        ChangePasswordGUI gui = new ChangePasswordGUI();
+        ChangePasswordGUI gui = new ChangePasswordGUI(db);
         gui.setVisible(true);
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 

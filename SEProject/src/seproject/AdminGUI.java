@@ -5,17 +5,39 @@
  */
 package seproject;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
 /**
  *
  * @author reticent
  */
 public class AdminGUI extends javax.swing.JFrame {
 
+    //Private member variables
+    StaffGUI gui;   //StaffGUI gui
+    Database db;    //Database db
+    
     /**
      * Creates new form AdminGUI
      */
     public AdminGUI() {
         initComponents();
+    }
+    
+    public AdminGUI(StaffGUI gui, Database db) {
+        this.gui = gui;
+        this.db = db;
+        this.gui.setVisible(false); //StaffGUI becomes Hidden
+        initComponents();
+        
+        btnRefreshCoursesActionPerformed(null);
+        btnRefreshUserTableActionPerformed(null);
     }
 
     /**
@@ -31,19 +53,40 @@ public class AdminGUI extends javax.swing.JFrame {
         pnlAddUser = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAddUser = new javax.swing.JTable();
-        btnAddUsers = new javax.swing.JButton();
+        btnAddNewUsers = new javax.swing.JButton();
+        btnNewRemoveUser = new javax.swing.JButton();
+        btnSubmitNewUsers = new javax.swing.JButton();
         pnlAddClasses = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblAddNewCourses = new javax.swing.JTable();
+        btnAddNewCourse = new javax.swing.JButton();
+        btnRemoveNewCourse = new javax.swing.JButton();
+        btnSubmitNewCourses = new javax.swing.JButton();
+        pnlManageUsers = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblManageUsers = new javax.swing.JTable();
+        btnRefreshUserTable = new javax.swing.JButton();
+        btnModifyUsers = new javax.swing.JButton();
+        btnRemoveUser = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblManageCourses = new javax.swing.JTable();
+        btnRefreshCourses = new javax.swing.JButton();
+        btnModifyCourse = new javax.swing.JButton();
+        btnRemoveTblCourse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Administrator GUI");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         tblAddUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "First Name", "Last Name", "Position", "Department"
@@ -59,7 +102,26 @@ public class AdminGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblAddUser);
 
-        btnAddUsers.setText("Add Users");
+        btnAddNewUsers.setText("Add Users");
+        btnAddNewUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNewUsersActionPerformed(evt);
+            }
+        });
+
+        btnNewRemoveUser.setText("Remove User");
+        btnNewRemoveUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewRemoveUserActionPerformed(evt);
+            }
+        });
+
+        btnSubmitNewUsers.setText("Submit New User");
+        btnSubmitNewUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitNewUsersActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlAddUserLayout = new javax.swing.GroupLayout(pnlAddUser);
         pnlAddUser.setLayout(pnlAddUserLayout);
@@ -69,8 +131,11 @@ public class AdminGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
-                .addComponent(btnAddUsers)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGroup(pnlAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnNewRemoveUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddNewUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSubmitNewUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlAddUserLayout.setVerticalGroup(
             pnlAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,7 +143,11 @@ public class AdminGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlAddUserLayout.createSequentialGroup()
-                        .addComponent(btnAddUsers)
+                        .addComponent(btnAddNewUsers)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnNewRemoveUser)
+                        .addGap(54, 54, 54)
+                        .addComponent(btnSubmitNewUsers)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addContainerGap())
@@ -86,18 +155,232 @@ public class AdminGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Add Users", pnlAddUser);
 
+        tblAddNewCourses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Course ID", "Room No", "Begin Time", "End Time", "Day", "Staff ID"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblAddNewCourses);
+
+        btnAddNewCourse.setText("Add Course");
+        btnAddNewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNewCourseActionPerformed(evt);
+            }
+        });
+
+        btnRemoveNewCourse.setText("Remove Course");
+        btnRemoveNewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveNewCourseActionPerformed(evt);
+            }
+        });
+
+        btnSubmitNewCourses.setText("Submit New Courses");
+        btnSubmitNewCourses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitNewCoursesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlAddClassesLayout = new javax.swing.GroupLayout(pnlAddClasses);
         pnlAddClasses.setLayout(pnlAddClassesLayout);
         pnlAddClassesLayout.setHorizontalGroup(
             pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
+            .addGroup(pnlAddClassesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAddNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveNewCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnSubmitNewCourses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlAddClassesLayout.setVerticalGroup(
             pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGroup(pnlAddClassesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlAddClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlAddClassesLayout.createSequentialGroup()
+                        .addComponent(btnAddNewCourse)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRemoveNewCourse)
+                        .addGap(53, 53, 53)
+                        .addComponent(btnSubmitNewCourses)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Add Courses", pnlAddClasses);
+
+        tblManageUsers.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User ID", "Username", "First Name", "Last Name", "Position", "Department"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblManageUsers);
+
+        btnRefreshUserTable.setText("Refresh");
+        btnRefreshUserTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshUserTableActionPerformed(evt);
+            }
+        });
+
+        btnModifyUsers.setText("Modify");
+        btnModifyUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyUsersActionPerformed(evt);
+            }
+        });
+
+        btnRemoveUser.setText("Remove");
+        btnRemoveUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveUserActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlManageUsersLayout = new javax.swing.GroupLayout(pnlManageUsers);
+        pnlManageUsers.setLayout(pnlManageUsersLayout);
+        pnlManageUsersLayout.setHorizontalGroup(
+            pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlManageUsersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRefreshUserTable, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(btnModifyUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        pnlManageUsersLayout.setVerticalGroup(
+            pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlManageUsersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlManageUsersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlManageUsersLayout.createSequentialGroup()
+                        .addComponent(btnRefreshUserTable)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifyUsers)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemoveUser)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Manage Users", pnlManageUsers);
+
+        tblManageCourses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Section No.", "Course ID", "Room No.", "Start Time", "End Time", "Class Days", "Staff ID"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(tblManageCourses);
+
+        btnRefreshCourses.setText("Refresh");
+        btnRefreshCourses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshCoursesActionPerformed(evt);
+            }
+        });
+
+        btnModifyCourse.setText("Modify");
+        btnModifyCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyCourseActionPerformed(evt);
+            }
+        });
+
+        btnRemoveTblCourse.setText("Remove");
+        btnRemoveTblCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveTblCourseActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnRefreshCourses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModifyCourse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveTblCourse, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnRefreshCourses)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifyCourse)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemoveTblCourse)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Manage Courses", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,7 +388,7 @@ public class AdminGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 976, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -119,6 +402,598 @@ public class AdminGUI extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * btnAddNewUsers Action Performed
+     * ---------------------------------------------------
+     * Adds Users from JList according to how the information was filled.
+     * Adding to the field of Position and Department indicates new user is
+     * a staff. Else, it indicates that user is a Student is both are empty.
+     * @param evt 
+     */
+    private void btnAddNewUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewUsersActionPerformed
+        //Instanced Variables
+        String firstName;
+        String lastName;
+        int sizeOfTable = tblAddUser.getRowCount();
+        
+        if (sizeOfTable == 0)
+        {
+            DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+            model.addRow(new Object[]{null,null,null,null} );
+            
+        }
+        else 
+        {
+            firstName = (String)tblAddUser.getValueAt(sizeOfTable-1, 0);
+            lastName = (String)tblAddUser.getValueAt(sizeOfTable-1, 1);
+            
+            if ( !(firstName == null || lastName == null))
+            {
+                if (!(firstName.equals("") || lastName.equals("")))
+                {
+                    DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                    model.addRow(new Object[]{null,null,null,null} );
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "First and/or Last Name are empty","Failed Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "First and/or Last Name are null","Failed Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnAddNewUsersActionPerformed
+
+    /**
+     * formWindowClosed
+     * ----------------------------
+     * Sets StaffGUI to visible.
+     * @param evt 
+     */
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        gui.setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
+
+    /**
+     * btnRemoveNewUser Action Performed
+     * ---------------------------------------------
+     * Removes selected new user from the table.
+     * @param evt 
+     */
+    private void btnNewRemoveUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewRemoveUserActionPerformed
+        
+        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+        int selectedRow = tblAddUser.getSelectedRow();
+        
+        if(selectedRow != -1) 
+        {
+            model.removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_btnNewRemoveUserActionPerformed
+
+    /**
+     * btnSubmitNewUser Action Performed
+     * ---------------------------------------------
+     * Submits User with appropriate fields to User Table and follow by either
+     * Student Table or SchoolStaff Table (depending on Position and Department field).
+     * @param evt 
+     */
+    private void btnSubmitNewUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitNewUsersActionPerformed
+        //Instanced Variables
+        String firstName;   //First Name of New User
+        String lastName;    //Last Name of New User
+        String position;    //Position of New User (If applicable)
+        String department;  //Department User Works (If applicable)
+        int sizeOfTable = tblAddUser.getRowCount(); //Size of the table
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+        Object [] o;    //Stores the content of the User (School Staff = 4 items / Student = 2 items)
+        boolean b;  //Return true if create user was successful, else false
+        
+        if (sizeOfTable != 0)
+        {
+            int result = JOptionPane.showConfirmDialog 
+                   (null, "Are you sure you want to submit?","Warning",dialogButton);
+            if(result == JOptionPane.YES_OPTION)
+            {
+                for (int x = 0; x < sizeOfTable; x++)
+                {
+                    firstName = (String)tblAddUser.getValueAt(x, 0);
+                    lastName = (String)tblAddUser.getValueAt(x, 1);
+
+                    if (!(firstName == null || lastName == null))   //If both firstName and lastName are not null
+                    {
+                        if (firstName.equals("") || lastName.equals("")) //If either firstName or lastName is blank "" (Error with row)
+                        {
+                            JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,"Error Adding User (Blank Name)",
+                                            JOptionPane.ERROR_MESSAGE);
+                        }
+                        else //firstName and lastName are not blank
+                        {
+                            position = (String)tblAddUser.getValueAt(x, 2);
+                            department = (String)tblAddUser.getValueAt(x, 3);
+
+                            if (!(position == null || department == null)) //Position and Department != null
+                            {
+                                if (position.equals("") && department.equals("")) //Adds New Student User to database (Login & Student)
+                                {
+                                    int i = 2;
+                                    o = new Object[i];
+                                    o[0] = firstName;
+                                    o[1] = lastName;
+                                    try
+                                    {
+                                        b = db.createUser(i, o);
+
+                                        if (b)
+                                        {
+                                            System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Create Student User Rejected("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        System.out.println("Error adding New Student User (AdminGUI): " + e);
+                                    }
+                                }
+                                else if (position.equals("") || department.equals("")) //Position and Department contains blank String "" (Error with row)
+                                {
+                                    JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName 
+                                                                        + "\nDPosition: " + position + "\nDepartment: " + department
+                                                                        ,"Error Adding Staff User", JOptionPane.ERROR_MESSAGE);
+                                }
+                                else //Add new Staff to database (Login & SchoolStaff)
+                                {
+                                    int i = 4;
+                                    o = new Object[i];
+                                    o[0] = firstName;
+                                    o[1] = lastName;
+                                    o[2] = position;
+                                    o[3] =  department;
+
+                                    try
+                                    {
+                                        b = db.createUser(i, o);
+
+                                        if (b)
+                                        {
+                                            System.out.println("Create Staff User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                        else
+                                        {
+                                            System.out.println("Create Staff User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
+                                        }
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        System.out.println("Error adding New User Staff(AdminGUI): " + e);
+                                    }
+                                }
+                            }
+                            else //Adds New Student User to database (Login & Student)
+                            {
+                                int i = 2;
+                                o = new Object[i];
+                                o[0] = firstName;
+                                o[1] = lastName;
+
+                                try
+                                {
+                                    b = db.createUser(i, o);
+
+                                    if (b)
+                                    {
+                                        System.out.println("Create Student User Successful("+ x +"): " + lastName + ", "+ firstName);
+                                    }
+                                    else
+                                    {
+                                        System.out.println("Create Student User Unsuccessful("+ x +"): " + lastName + ", "+ firstName);
+                                    }
+                                }
+                                catch(Exception e)
+                                {
+                                    System.out.println("Error adding New Student User (AdminGUI): " + e);
+                                }
+                            }
+                        }
+                    }
+                    else //else, firstName or lastName are null (Error with row)
+                    {
+                        JOptionPane.showMessageDialog(null, "First Name: " + firstName + "\nLast Name: " + lastName ,
+                                                            "Error Adding User(1 First/Last Name is Null)", JOptionPane.ERROR_MESSAGE);
+
+                    }
+
+                    if (x == sizeOfTable-1) //Reset Table row count
+                    {
+                        DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
+                        model.setRowCount(0);
+                    }
+                    
+                    btnRefreshUserTableActionPerformed(null); //Update User Table
+                }
+
+            }
+        }
+    }//GEN-LAST:event_btnSubmitNewUsersActionPerformed
+
+    /**
+     * btnAddNewCourse Action Performed
+     * --------------------------------------------------------
+     * Adds New Row to tblAddNewCourses.
+     * @param evt 
+     */
+    private void btnAddNewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewCourseActionPerformed
+       //Instanced Variables
+        String courseID;    //Holds CourseID (ex. CS3304)
+        String roomNo;  //Holds Class Room No.
+        String beginTime;    //Holds Class Time in String (temp)
+        String endTime;    //Holds Class Time in String (temp)
+        String day; //Holds Days (ex. MW = Monday & Wednesday)
+        int id; //Holds selected staffID
+        ArrayList<Integer> staffID = db.getAllProfessorID();    //Holds Staff teaching course/class
+        int sizeOfTable = tblAddNewCourses.getRowCount();   //Holds current size of table (based on rows)
+        JComboBox staffIDList = new JComboBox();    //Stores JComboBox of Teacher ID
+        //JComboBox daysList = new JComboBox();   //Stores JComboBox of Class Days
+        
+        //Fill JCombo Box with Staff ID
+        for (int x = 0; x < staffID.size(); x++)
+        {
+            staffIDList.addItem(staffID.get(x));
+        }
+        
+        if (sizeOfTable == 0)
+        {
+            DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+            model.addRow(new Object[]{null,null,null,null,null,null} );
+            
+            TableColumn staffIDColumn = tblAddNewCourses.getColumnModel().getColumn(5);
+            staffIDColumn.setCellEditor(new DefaultCellEditor(staffIDList));
+        }
+        else 
+        {    
+            courseID = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 0);
+            roomNo = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 1);
+            beginTime = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 2);
+            endTime = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 3);
+            day = (String)tblAddNewCourses.getValueAt(sizeOfTable-1, 4);
+            Object o = (Object)tblAddNewCourses.getValueAt(sizeOfTable-1, 5);
+            
+            if ( !(courseID == null || roomNo == null || beginTime == null || endTime == null || day == null || o == null ))
+            {
+                id = (int)o;
+                
+                if (!(courseID.equals("") || roomNo.equals("") || beginTime.equals("") || endTime.equals("") || day.equals("")))
+                {
+                    DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+                    model.addRow(new Object[]{null,null,null,null,null,null} );
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Testing 1","Failed Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Testing 2","Failed Adding New Row!!",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnAddNewCourseActionPerformed
+
+    /**
+     * btnRemoveNewCourse Action Performed
+     * ---------------------------------------------------
+     * Removes selected new courses from the table.
+     * @param evt 
+     */
+    private void btnRemoveNewCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveNewCourseActionPerformed
+        DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+        int selectedRow = tblAddNewCourses.getSelectedRow();
+        
+        if(selectedRow != -1) 
+        {
+            model.removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_btnRemoveNewCourseActionPerformed
+
+    /**
+     * btnSubmitNewCourses
+     * ---------------------------------------------
+     * Submits Courses with appropriate fields to Classes Table.
+     * @param evt 
+     */
+    private void btnSubmitNewCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitNewCoursesActionPerformed
+        
+        //Instanced Variables
+        String courseID;   //CourseID (ex. CS3304, etc.)
+        String roomNo;    //Room course is being taught in.
+        String beginTime; //Time (in 24-Hour)
+        String endTime; //Time (in 24-Hour)
+        String day; //Day(s) of Class (M = Monday,  T = Tuesday, W= Wednesday, Th = Thursday, F = Friday, S=Saturday)
+        int id = 0;  //Holds staff ID
+        
+        int sizeOfTable = tblAddNewCourses.getRowCount(); //Size of the table
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+
+        Object [] o;    //Stores the content of the courses to send to Database createNewCourse(Object [] o) function
+        boolean b;  //Return true if create courses was successful, else false
+
+       if (sizeOfTable != 0)
+       {
+           int result = JOptionPane.showConfirmDialog 
+               (null, "Are you sure you want to submit?","Warning",dialogButton);
+           if(result == JOptionPane.YES_OPTION)
+           {
+               for (int x = 0; x < sizeOfTable; x++)
+               {
+                   courseID = (String)tblAddNewCourses.getValueAt(x, 0);
+                   roomNo = (String)tblAddNewCourses.getValueAt(x, 1);
+                   beginTime = (String)tblAddNewCourses.getValueAt(x, 2);
+                   endTime = (String)tblAddNewCourses.getValueAt(x, 3);
+                   day = (String)tblAddNewCourses.getValueAt(x, 4);
+                   Object temp = tblAddNewCourses.getValueAt(x, 5); //Temporarily holds StaffID as object
+                   
+                   if (!(courseID == null || roomNo == null || beginTime == null 
+                           || endTime == null || day == null || temp == null))
+                   {
+                       id = (int)temp;
+                       
+                       if (!(courseID.equals("") || roomNo.equals("") || beginTime.equals("")
+                               || endTime.equals("") || day.equals("") || id == 0))
+                       {
+                           try
+                           {
+                               o = new Object [6];
+                               o[0] = courseID;
+                               o[1] = roomNo;
+                               o[2] = beginTime;
+                               o[3] = endTime;
+                               o[4] = day;
+                               o[5] = id;
+                               
+                               b = db.createNewCourse(o);
+                               
+                               if (b)
+                               {
+                                   System.out.println("Create Course/Class Successful("+ x +"): " + courseID + ", "+ roomNo
+                                                        + "\n"+beginTime+"-"+endTime+ " "+day + "\n"+id);
+                               }
+                               else
+                               {
+                                   System.out.println("Create Course/Class Unsuccessful("+ x +"): " + courseID + ", "+ roomNo
+                                                        + "\n"+beginTime+"-"+endTime+ " "+day + "\n"+id);
+                               }
+                               
+                           }
+                           catch (Exception e)
+                           {
+                               System.out.println("Error Adding New Courses(AdminGUI): " + e);
+                           }
+                       }
+                       else //This should never happen (just in case)
+                       {
+                           JOptionPane.
+                            showMessageDialog(null, "The Following Course has empty values"
+                                    + "\nCourse ID: " + courseID
+                                    + "\nRoom No.: " + roomNo
+                                    + "\nBegin Time: " + beginTime
+                                    + "\nEnd Time: " + endTime
+                                    + "\nDay: " + day
+                                    + "\nStaff ID: " + id, 
+                                "Null Values in Table", JOptionPane.ERROR_MESSAGE);
+                       }
+                   }
+                   else
+                   {
+                       JOptionPane.
+                            showMessageDialog(null, "The Following Course has null values"
+                                    + "\nCourse ID: " + courseID
+                                    + "\nRoom No.: " + roomNo
+                                    + "\nBegin Time: " + beginTime
+                                    + "\nEnd Time: " + endTime
+                                    + "\nDay: " + day
+                                    + "\nStaff ID: " + id, 
+                                "Null Values in Table", JOptionPane.ERROR_MESSAGE);
+                   }
+                   
+                if (x == sizeOfTable-1)
+                {
+                    DefaultTableModel model = (DefaultTableModel)tblAddNewCourses.getModel();
+                    model.setRowCount(0);
+                }
+                   
+               } //For loop    
+           }
+       }
+       else
+       {
+           JOptionPane.
+                   showMessageDialog(null, "New Courses Table is Empty!" ,
+                            "Empty Table", JOptionPane.ERROR_MESSAGE);
+       }
+       
+       btnRefreshCoursesActionPerformed(null);  //Update Course Table
+    }//GEN-LAST:event_btnSubmitNewCoursesActionPerformed
+
+    /**
+     * btnRefreshUserTable
+     * -------------------------------
+     * Refresh tblManageUser with most recent list of Login, SchoolStaff, and Student.
+     * @param evt 
+     */
+    private void btnRefreshUserTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshUserTableActionPerformed
+        //Instanced Variables
+        ArrayList<ArrayList<Object>> o = db.getAllUserInfo();   //Stores each User from DB
+        DefaultTableModel model = (DefaultTableModel)tblManageUsers.getModel();
+        model.setRowCount(0); //Reset Table to 0
+        
+        for (int x = 0; x < o.size(); x++)
+        {
+            int size = o.get(x).size();
+            
+            if (size == 4)
+            {
+                model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), null, null} );
+            }
+            else
+            {
+                model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5)} );
+            }
+        }
+    }//GEN-LAST:event_btnRefreshUserTableActionPerformed
+
+    /**
+     * btnModifyUsers Action Performed
+     * -----------------------------------------
+     * Opens up JFrame that allows modification to selected user.
+     * @param evt 
+     */
+    private void btnModifyUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyUsersActionPerformed
+        
+        String position = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);
+        String department = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);
+        Object [] o;    //Holds User information
+        
+        if (tblManageUsers.getRowCount() != 0)
+        {
+            if(position == null && department == null) //Editing Student Information
+            {
+                o = new Object[4];
+                o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //UserID
+                o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
+                o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
+                o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
+
+                AdminModifyUser g = new AdminModifyUser(db,o);
+                g.setVisible(true);
+            }
+            else //Editing Teacher
+            {
+                o = new Object[6];
+                o[0] = (int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0);  //User ID
+                o[1] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 1);   //Username
+                o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
+                o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
+                o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);   //Position
+                o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);   //Department
+
+                AdminModifyUser g = new AdminModifyUser(db,o);
+                g.setVisible(true);
+            }
+        }
+        
+    }//GEN-LAST:event_btnModifyUsersActionPerformed
+
+    /**
+     * btnRemoveUser Action Performed
+     * -------------------------------------
+     * Removes currently selected user from the database.
+     * @param evt 
+     */
+    private void btnRemoveUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveUserActionPerformed
+        //Instanced Member Variable
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+        int result = JOptionPane.showConfirmDialog 
+            (null, "Are you sure you want to remove user?","Warning",dialogButton);
+        
+        if (result == JOptionPane.YES_OPTION)
+        {
+            if(db.deleteUser((int)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 0))) //Delete Successful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was successful.","Delete Successful",
+                                        JOptionPane.DEFAULT_OPTION);
+            }
+            else //Delete Unsuccessful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was unsuccessful.","Delete Failed",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        } 
+    }//GEN-LAST:event_btnRemoveUserActionPerformed
+
+    /**
+     * btnRefreshCourses Action Performed
+     * -----------------------------------------------
+     * Refresh tblManageCourses with most recent courses in database.
+     * @param evt 
+     */
+    private void btnRefreshCoursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshCoursesActionPerformed
+        //Instanced Variables
+        ArrayList<ArrayList<Object>> o = db.getAllCourses();   //Stores each User from DB
+        DefaultTableModel model = (DefaultTableModel)tblManageCourses.getModel();
+        model.setRowCount(0); //Reset Table to 0
+        
+        for (int x = 0; x < o.size(); x++)
+        {
+            int size = o.get(x).size();
+            
+            model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5),o.get(x).get(6)} );
+            
+        }
+    }//GEN-LAST:event_btnRefreshCoursesActionPerformed
+
+    /**
+     * btnModifyCourse Action Performed
+     * -----------------------------------------
+     * Opens up JFrame that allows modification to selected course.
+     * @param evt 
+     */
+    private void btnModifyCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyCourseActionPerformed
+        Object [] o;    //Holds User information
+        
+        if (tblManageCourses.getRowCount() != 0)
+        {
+            o = new Object[7];
+            o[0] = (int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 0);  //Section No.
+            o[1] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 1);   //Course ID
+            o[2] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 2);   //Room No.
+            o[3] = (Time)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 3);   //Start Class Time
+            o[4] = (Time)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 4); //End Class Time
+            o[5] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 5);   //Class Days
+            o[6] = (int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 6);  //Staff ID
+
+            AdminModifyCourse g = new AdminModifyCourse(db,o);
+            g.setVisible(true);
+        }
+    }//GEN-LAST:event_btnModifyCourseActionPerformed
+
+    /**
+     * btnRemoveTblCourse Action Performed
+     * -----------------------------------------------
+     * 
+     * @param evt 
+     */
+    private void btnRemoveTblCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTblCourseActionPerformed
+        
+        //Instanced Member Variable
+        int dialogButton = JOptionPane.YES_NO_OPTION;   //Confirmation pop to proceed
+        int result = JOptionPane.showConfirmDialog 
+            (null, "Are you sure you want to remove course?","Warning",dialogButton);
+        
+        if (result == JOptionPane.YES_OPTION)
+        {
+            if(db.deleteCourse((int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 0))) //Delete Successful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was successful.","Delete Successful",
+                                        JOptionPane.DEFAULT_OPTION);
+            }
+            else //Delete Unsuccessful
+            {
+                JOptionPane.showMessageDialog(null, "Delete was unsuccessful.","Delete Failed",
+                                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnRemoveTblCourseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,11 +1031,30 @@ public class AdminGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddUsers;
+    private javax.swing.JButton btnAddNewCourse;
+    private javax.swing.JButton btnAddNewUsers;
+    private javax.swing.JButton btnModifyCourse;
+    private javax.swing.JButton btnModifyUsers;
+    private javax.swing.JButton btnNewRemoveUser;
+    private javax.swing.JButton btnRefreshCourses;
+    private javax.swing.JButton btnRefreshUserTable;
+    private javax.swing.JButton btnRemoveNewCourse;
+    private javax.swing.JButton btnRemoveTblCourse;
+    private javax.swing.JButton btnRemoveUser;
+    private javax.swing.JButton btnSubmitNewCourses;
+    private javax.swing.JButton btnSubmitNewUsers;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel pnlAddClasses;
     private javax.swing.JPanel pnlAddUser;
+    private javax.swing.JPanel pnlManageUsers;
+    private javax.swing.JTable tblAddNewCourses;
     private javax.swing.JTable tblAddUser;
+    private javax.swing.JTable tblManageCourses;
+    private javax.swing.JTable tblManageUsers;
     // End of variables declaration//GEN-END:variables
 }
