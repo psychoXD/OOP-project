@@ -5,6 +5,9 @@
  */
 package seproject;
 
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author reticent
@@ -43,6 +46,7 @@ public class StaffGUI extends javax.swing.JFrame {
             btnAdminManage.setVisible(false);
         }
         
+        fillCourses();
     }
 
     /**
@@ -59,7 +63,13 @@ public class StaffGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMngClasses = new javax.swing.JTable();
         btnAdminManage = new javax.swing.JButton();
+        pnlViewStudents = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblStudents = new javax.swing.JTable();
         pnlManageAssignments = new javax.swing.JPanel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIMS Staff GUI");
@@ -67,20 +77,20 @@ public class StaffGUI extends javax.swing.JFrame {
 
         tblMngClasses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Section No.", "Course ID", "Room No.", "Class Days", "Class Time", "Staff ID"
+                "Section No.", "Course ID", "Room No.", "Begin Time", "End Time", "Class Days", "Staff ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -89,6 +99,11 @@ public class StaffGUI extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblMngClasses.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMngClassesMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblMngClasses);
@@ -105,25 +120,69 @@ public class StaffGUI extends javax.swing.JFrame {
         pnlManageClassesLayout.setHorizontalGroup(
             pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlManageClassesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(511, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlManageClassesLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAdminManage)
                 .addContainerGap())
+            .addGroup(pnlManageClassesLayout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1048, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         pnlManageClassesLayout.setVerticalGroup(
             pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlManageClassesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnAdminManage)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Manage Classes", pnlManageClasses);
+
+        tblStudents.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Student ID ", "First Name", "Last Name"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblStudents);
+
+        javax.swing.GroupLayout pnlViewStudentsLayout = new javax.swing.GroupLayout(pnlViewStudents);
+        pnlViewStudents.setLayout(pnlViewStudentsLayout);
+        pnlViewStudentsLayout.setHorizontalGroup(
+            pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlViewStudentsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 909, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(247, Short.MAX_VALUE))
+        );
+        pnlViewStudentsLayout.setVerticalGroup(
+            pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlViewStudentsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("View Students", pnlViewStudents);
 
         javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
         pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
@@ -133,10 +192,25 @@ public class StaffGUI extends javax.swing.JFrame {
         );
         pnlManageAssignmentsLayout.setVerticalGroup(
             pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 639, Short.MAX_VALUE)
+            .addGap(0, 618, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Manage Assignment", pnlManageAssignments);
+        jTabbedPane1.addTab("Manage Assignments", pnlManageAssignments);
+
+        jMenu1.setText("Menu");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Logout");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,6 +238,65 @@ public class StaffGUI extends javax.swing.JFrame {
         gui.setVisible(true);
     }//GEN-LAST:event_btnAdminManageActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        this.dispose();
+        LoginMenu gui = new LoginMenu();
+        gui.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void tblMngClassesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMngClassesMouseClicked
+        try
+        {
+            
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_tblMngClassesMouseClicked
+
+    
+    private void fillCourses()
+    {
+        try
+        {
+            if (user.getPosition().equals("Database Administrator"))    //Staff is Admin
+            {
+                //Instanced Variables
+                ArrayList<ArrayList<Object>> o = db.getAllCourses();   //Stores each User from DB
+                DefaultTableModel model = (DefaultTableModel)tblMngClasses.getModel();
+                model.setRowCount(0); //Reset Table to 0
+
+                for (int x = 0; x < o.size(); x++)
+                {
+                    int size = o.get(x).size();
+
+                    model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5),o.get(x).get(6)} );
+
+                }
+            }
+            else    //Staff is a teacher
+            {
+                //Instanced Variables
+                ArrayList<ArrayList<Object>> o = db.getCourseTaughtByTeacher(user.getId());   //Stores each User from DB
+                DefaultTableModel model = (DefaultTableModel)tblMngClasses.getModel();
+                model.setRowCount(0); //Reset Table to 0
+
+                for (int x = 0; x < o.size(); x++)
+                {
+                    int size = o.get(x).size();
+
+                    model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5),o.get(x).get(6)} );
+
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -201,10 +334,16 @@ public class StaffGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminManage;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel pnlManageAssignments;
     private javax.swing.JPanel pnlManageClasses;
+    private javax.swing.JPanel pnlViewStudents;
     private javax.swing.JTable tblMngClasses;
+    private javax.swing.JTable tblStudents;
     // End of variables declaration//GEN-END:variables
 }

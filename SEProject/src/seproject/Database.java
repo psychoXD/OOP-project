@@ -753,6 +753,66 @@ public class Database {
     }
     
     /**
+     * getCourseTaughtByTeacher()
+     * -------------------------------
+     * Returns an ArrayList<ArrayList<Object>> of every course available in 
+     * the entity Class from database that is taught by teacher with speciified ID.
+     * @return 
+     */
+    public ArrayList<ArrayList<Object>> getCourseTaughtByTeacher(int id)
+    {
+        try
+        {
+            ArrayList<ArrayList<Object> >o = new ArrayList<ArrayList<Object>>();    //Holds all Courses
+            
+            int sectionNo; //Holds current course SectionNo
+            String courseID = "";    //CourseID of Course
+            String roomNo = "";   //RoomNo course is held
+            Time classBeginTime;    //Time class starts
+            Time classEndTime;    //Time class ends
+            String classDays = "";  //Day(s) class is held on
+            int staffID;    //Holds Staff teaching class
+            ArrayList<Object> temp;
+            
+            //Getting User ID
+            preparedStatement = connect.prepareStatement("SELECT * FROM Class WHERE UserID =?");
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                temp = new ArrayList<Object>();
+                
+                sectionNo = resultSet.getInt("SectionNo");
+                courseID = resultSet.getString("CourseID");
+                roomNo = resultSet.getString("RoomNo");
+                classBeginTime = resultSet.getTime("ClassBeginTime");
+                classEndTime = resultSet.getTime("ClassEndTime");
+                classDays = resultSet.getString("ClassDays");
+                staffID = resultSet.getInt("UserID");
+                
+                temp.add(sectionNo);
+                temp.add(courseID);
+                temp.add(roomNo);
+                temp.add(classBeginTime);
+                temp.add(classEndTime);
+                temp.add(classDays);
+                temp.add(staffID);
+                
+                o.add(temp); 
+            }
+            
+            return o;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving all Courses: " + e);
+            return null;
+        }
+    }
+            
+    
+    /**
      * getStudentIDNotInCourse(int sectionNo)
      * ------------------------------------------------
      * 
