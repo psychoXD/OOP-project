@@ -879,6 +879,48 @@ public class Database {
     }
     
     /**
+     * getStudentIDInCourse(int sectionNo)
+     * ---------------------------------------------------
+     * 
+     * @param sectionNo
+     * @return 
+     */
+    public ArrayList<ArrayList<Object>> getStudentInfoInCourse(int sectionNo)
+    {
+        try
+        {
+            ArrayList<Integer> l= this.getStudentIDInCourse(sectionNo);
+            ArrayList<ArrayList<Object>> o = new ArrayList<ArrayList<Object>>();
+            
+            for (int x = 0; x < l.size(); x++)
+            {
+                ArrayList<Object> temp = new ArrayList<Object>();
+                
+                //Getting User ID
+                preparedStatement = connect.prepareStatement("SELECT * FROM Student WHERE UserID =?");
+                preparedStatement.setInt(1, l.get(x));
+                resultSet = preparedStatement.executeQuery();
+
+                while(resultSet.next())
+                {
+                    temp.add(resultSet.getInt("UserID"));
+                    temp.add(resultSet.getString("FirstName"));
+                    temp.add(resultSet.getString("LastName"));
+                    
+                    o.add(temp);
+                }
+            }
+            
+            return o;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Retrieving Student Information In Course: " + e);
+            return null;
+        }
+    }
+    
+    /**
      * addStudentToCourse(int sectionNo, int studentID)
      * ------------------------------------------------------------
      * 

@@ -6,6 +6,7 @@
 package seproject;
 
 import java.util.ArrayList;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -58,7 +59,7 @@ public class StaffGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tbdStaff = new javax.swing.JTabbedPane();
         pnlManageClasses = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMngClasses = new javax.swing.JTable();
@@ -138,7 +139,7 @@ public class StaffGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Manage Classes", pnlManageClasses);
+        tbdStaff.addTab("Manage Classes", pnlManageClasses);
 
         tblStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -182,7 +183,7 @@ public class StaffGUI extends javax.swing.JFrame {
                 .addContainerGap(75, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("View Students", pnlViewStudents);
+        tbdStaff.addTab("View Students", pnlViewStudents);
 
         javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
         pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
@@ -195,7 +196,7 @@ public class StaffGUI extends javax.swing.JFrame {
             .addGap(0, 618, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Manage Assignments", pnlManageAssignments);
+        tbdStaff.addTab("Manage Assignments", pnlManageAssignments);
 
         jMenu1.setText("Menu");
 
@@ -218,14 +219,14 @@ public class StaffGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(tbdStaff)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(tbdStaff)
                 .addContainerGap())
         );
 
@@ -247,7 +248,32 @@ public class StaffGUI extends javax.swing.JFrame {
     private void tblMngClassesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMngClassesMouseClicked
         try
         {
+            //Instanced Variables
+            JTable tbl = (JTable)evt.getSource();
+            Object temp = tbl.getValueAt(tbl.getSelectedRow(), 0);
+            int courseID = (int) temp;
+
+            ArrayList<ArrayList<Object>> s = db.getStudentInfoInCourse(courseID);
+            int size = s.size();
             
+            if (size != 0)
+            {
+                DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
+                model.setRowCount(0); //Reset Table to 0
+                
+                for (int x = 0; x < size; x++)
+                {
+                    model.addRow(new Object[]{s.get(x).get(0),s.get(x).get(1),s.get(x).get(2)} );
+                }
+                
+                tbdStaff.setSelectedIndex(1);
+            }
+            else    //if empty
+            {
+                DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
+                model.setRowCount(0); //Reset Table to 0
+                tbdStaff.setSelectedIndex(1);
+            }
         }
         catch (Exception e)
         {
@@ -339,10 +365,10 @@ public class StaffGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel pnlManageAssignments;
     private javax.swing.JPanel pnlManageClasses;
     private javax.swing.JPanel pnlViewStudents;
+    private javax.swing.JTabbedPane tbdStaff;
     private javax.swing.JTable tblMngClasses;
     private javax.swing.JTable tblStudents;
     // End of variables declaration//GEN-END:variables
