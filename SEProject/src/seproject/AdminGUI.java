@@ -874,7 +874,7 @@ public class AdminGUI extends javax.swing.JFrame {
                 o[2] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 2);   //FirstName
                 o[3] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 3);   //LastName
 
-                AdminModifyUser g = new AdminModifyUser(db,o);
+                AdminModifyUser g = new AdminModifyUser(db,o, this);
                 g.setVisible(true);
             }
             else //Editing Teacher
@@ -887,11 +887,10 @@ public class AdminGUI extends javax.swing.JFrame {
                 o[4] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 4);   //Position
                 o[5] = (String)tblManageUsers.getValueAt(tblManageUsers.getSelectedRow(), 5);   //Department
 
-                AdminModifyUser g = new AdminModifyUser(db,o);
+                AdminModifyUser g = new AdminModifyUser(db,o, this);
                 g.setVisible(true);
             }
         }
-        
     }//GEN-LAST:event_btnModifyUsersActionPerformed
 
     /**
@@ -912,6 +911,8 @@ public class AdminGUI extends javax.swing.JFrame {
             {
                 JOptionPane.showMessageDialog(null, "Delete was successful.","Delete Successful",
                                         JOptionPane.DEFAULT_OPTION);
+                btnRefreshCoursesActionPerformed(null);
+                btnRefreshUserTableActionPerformed(null);
             }
             else //Delete Unsuccessful
             {
@@ -962,7 +963,7 @@ public class AdminGUI extends javax.swing.JFrame {
             o[5] = (String)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 5);   //Class Days
             o[6] = (int)tblManageCourses.getValueAt(tblManageCourses.getSelectedRow(), 6);  //Staff ID
 
-            AdminModifyCourse g = new AdminModifyCourse(db,o);
+            AdminModifyCourse g = new AdminModifyCourse(db,o, this);
             g.setVisible(true);
         }
     }//GEN-LAST:event_btnModifyCourseActionPerformed
@@ -995,6 +996,13 @@ public class AdminGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRemoveTblCourseActionPerformed
 
+    
+    public void refreshTables()
+    {
+        btnRefreshCoursesActionPerformed(null);
+        btnRefreshUserTableActionPerformed(null);
+    }
+    
     /**
      * @param args the command line arguments
      */

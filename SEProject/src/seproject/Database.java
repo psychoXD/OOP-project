@@ -572,7 +572,7 @@ public class Database {
                         .prepareStatement("UPDATE SchoolStaff staff " 
                                 + "SET staff.FirstName=?, "
                                 + "staff.LastName=?,"
-                                + "staff.Position=?."
+                                + "staff.Position=?,"
                                 + "staff.Department=? "
                                 + "WHERE staff.UserID=?");
                 preparedStatement.setString(1, firstName);

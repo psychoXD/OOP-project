@@ -17,6 +17,7 @@ public class AdminModifyUser extends javax.swing.JFrame {
     Database db;    //Database db
     Object [] o;    //Holds user information
     boolean b;  //True = Student, False = Staff/Teacher
+    AdminGUI gui;
     
     /**
      * Creates new form AdminModifyUser
@@ -25,9 +26,10 @@ public class AdminModifyUser extends javax.swing.JFrame {
         initComponents();
     }
     
-    public AdminModifyUser(Database db, Object[] o) {
+    public AdminModifyUser(Database db, Object[] o, AdminGUI gui) {
         this.db = db;
         this.o = o;
+        this.gui = gui;
         initComponents();
         
         if (o.length == 4)  //Student User
@@ -314,7 +316,7 @@ public class AdminModifyUser extends javax.swing.JFrame {
                 
             }
         }
-        
+        gui.refreshTables();
     }//GEN-LAST:event_btnSubmitChangesActionPerformed
 
     /**

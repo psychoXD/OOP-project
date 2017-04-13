@@ -24,6 +24,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     //Private Declared Memeber Variables
     Database db;    //Database db
     Object [] o;    //Holds course Information
+    AdminGUI gui;
     
     /**
      * Creates new form AdminModifyCourse
@@ -40,9 +41,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
      * @param db
      * @param o 
      */
-    public AdminModifyCourse(Database db, Object[]o) {
+    public AdminModifyCourse(Database db, Object[]o, AdminGUI gui) {
         this.db = db;
         this.o = o;
+        this.gui = gui;
         initComponents();
         
         txtSectionNo.setText(Integer.toString((int)o[0]));
@@ -326,6 +328,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
             String classDays = txtClassDays.getText();    //Days Class in on
             int staffID = Integer.parseInt(txtStaffID.getText()) ;    //StaffID of Staff teaching class            
             
+            
             if ( !(CourseID.equals((String)o[1])) )
             {
                 i++;
@@ -351,11 +354,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
                 i++;
             }
             
-            if (!(staffID != (int)o[6]) )
+            if (staffID != (int)o[6])
             {
                 i++;
             }
-                
             
             if (i != 0) //If there are any changes
             {
@@ -384,8 +386,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         }
         catch (Exception e)
         {
-            
+            System.out.println(e);
         }
+        
+        gui.refreshTables();
         
     }//GEN-LAST:event_btnSubmitActionPerformed
 
@@ -535,7 +539,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-            
+            System.out.println(e);
         }
     }
     
@@ -559,7 +563,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
         }
         catch(Exception e)
         {
-            
+            System.out.println(e);
         }
     }
     
