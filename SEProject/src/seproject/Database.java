@@ -753,6 +753,8 @@ public class Database {
     }
     
     /**
+     * getStudentIDNotInCourse(int sectionNo)
+     * ------------------------------------------------
      * 
      * @param sectionNo
      * @return 
@@ -784,6 +786,8 @@ public class Database {
     }
     
     /**
+     * getStudentIDInCourse(int sectionNo)
+     * ---------------------------------------------------
      * 
      * @param sectionNo
      * @return 
@@ -815,6 +819,8 @@ public class Database {
     }
     
     /**
+     * addStudentToCourse(int sectionNo, int studentID)
+     * ------------------------------------------------------------
      * 
      * @param sectionNo
      * @param studentID
@@ -845,12 +851,14 @@ public class Database {
     }
     
     /**
+     * removeStudentFromCourse(int sectionNo, int StudentID)
+     * ---------------------------------------------------------------
      * 
      * @param sectionNo
      * @param studentID
      * @return 
      */
-    public boolean removeStudentToCourse(int sectionNo , int studentID)
+    public boolean removeStudentFromCourse(int sectionNo , int studentID)
     {
         try
         {

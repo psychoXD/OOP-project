@@ -273,7 +273,7 @@ public class AdminModifyUser extends javax.swing.JFrame {
             
             if (!(txtPosition.getText().equalsIgnoreCase((String)o[4]))) //Check if Position has changed
             {
-                position = txtFirstName.getText();
+                position = txtPosition.getText();
                 i++;
             }
             else
@@ -283,7 +283,7 @@ public class AdminModifyUser extends javax.swing.JFrame {
             
             if (!(txtDepartment.getText().equalsIgnoreCase((String)o[5]))) //Check if Department has changed
             {
-                department = txtLastName.getText();
+                department = txtDepartment.getText();
                 i++;
             }
             else

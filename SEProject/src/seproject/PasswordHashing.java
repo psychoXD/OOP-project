@@ -41,6 +41,7 @@ public class PasswordHashing {
         
         return sb.toString();
     }
+    
     public String getHash(String pwd, byte [] salt) throws NoSuchAlgorithmException
     {
         String p = pwd + new String(salt);

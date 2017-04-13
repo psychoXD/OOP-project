@@ -971,7 +971,7 @@ public class AdminGUI extends javax.swing.JFrame {
     /**
      * btnRemoveTblCourse Action Performed
      * -----------------------------------------------
-     * 
+     * Removes currently selected course from tblManageCourses.
      * @param evt 
      */
     private void btnRemoveTblCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTblCourseActionPerformed
@@ -994,9 +994,17 @@ public class AdminGUI extends javax.swing.JFrame {
                                         JOptionPane.ERROR_MESSAGE);
             }
         }
+        
+        this.refreshTables();
     }//GEN-LAST:event_btnRemoveTblCourseActionPerformed
 
     
+    /**
+     * refreshTables()
+     * -----------------------
+     * Updates all the information on tblManageCourses and tblManageUsers with current info
+     * from database.
+     */
     public void refreshTables()
     {
         btnRefreshCoursesActionPerformed(null);

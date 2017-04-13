@@ -394,7 +394,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
-     * 
+     * btnAddStudentActionPerformed()
+     * ---------------------------------------------------
+     * Adds currently selected Student (StudentID) from the lstStudentNotInClass
+     * into the current class being modified.
      * @param evt 
      */
     private void btnAddStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddStudentActionPerformed
@@ -421,7 +424,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddStudentActionPerformed
 
     /**
-     * 
+     * btnRemoveStudentActionPerformed()
+     * ----------------------------------------------
+     * Removes currently selected Student (StudentID) from the lstStudentInClass
+     * out of the current class being modified.
      * @param evt 
      */
     private void btnRemoveStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveStudentActionPerformed
@@ -431,7 +437,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
             int studentID = Integer.parseInt(String.valueOf(lstStudentInClass.getSelectedValue()));    //Student ID
             int sectionNo = Integer.parseInt(txtSectionNo.getText());   //Section No.
 
-            if (db.removeStudentToCourse(sectionNo, studentID))    //Success
+            if (db.removeStudentFromCourse(sectionNo, studentID))    //Success
             {
                 JOptionPane.showMessageDialog(null, "Update was successful.","Student removed from course",
                     JOptionPane.ERROR_MESSAGE);
@@ -447,7 +453,10 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveStudentActionPerformed
 
     /**
-     * 
+     * btnSearchUserActionPerformed()
+     * -----------------------------------------------------
+     * Searches StudentID from both list, and if found, selects it for the user.
+     * Meant as a tool to ease searching for the user if the list were to get long.
      * @param evt 
      */
     private void btnSearchUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchUserActionPerformed
@@ -520,7 +529,9 @@ public class AdminModifyCourse extends javax.swing.JFrame {
 
     
     /**
-     * 
+     * fillStudentNotInClass()
+     * -------------------------------------
+     * Fills in the JList with the ID of Students currently not in the class.
      */
     private void fillStudentNotInClass()
     {
@@ -544,7 +555,9 @@ public class AdminModifyCourse extends javax.swing.JFrame {
     }
     
     /**
-     * 
+     * fillStudentInClass()
+     * -------------------------------------
+     * Fills in the JList with the ID of Students currently in the class.
      */
     private void fillStudentInClass()
     {
