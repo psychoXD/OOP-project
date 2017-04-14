@@ -80,7 +80,7 @@ CREATE TABLE Student_Class
 
 CREATE TABLE ClassMaterial
 (
-    DocumentNo INT NOT NULL,
+    DocumentNo INT NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (DocumentNo),
     MaterialName VARCHAR (50),
     DocumentType VARCHAR (40),

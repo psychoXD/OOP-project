@@ -17,7 +17,8 @@ public class StaffGUI extends javax.swing.JFrame {
     
     //Declared Member Variables
     private Staff user;  //Holds User class of current User
-    private Database db;
+    private Database db;    //Database db
+    private int courseID;   //Holds courseID
 
     /**
      * Creates new form StaffGUI
@@ -68,6 +69,9 @@ public class StaffGUI extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblStudents = new javax.swing.JTable();
         pnlManageAssignments = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblClassMaterial = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -179,24 +183,68 @@ public class StaffGUI extends javax.swing.JFrame {
             pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlViewStudentsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tbdStaff.addTab("View Students", pnlViewStudents);
+
+        tblClassMaterial.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Document No", "Document Name", "Document Type", "Due Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tblClassMaterial);
 
         javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
         pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
         pnlManageAssignmentsLayout.setHorizontalGroup(
             pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1168, Short.MAX_VALUE)
+            .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(326, Short.MAX_VALUE))
         );
         pnlManageAssignmentsLayout.setVerticalGroup(
             pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        tbdStaff.addTab("Manage Class Material", pnlManageAssignments);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1168, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 618, Short.MAX_VALUE)
         );
 
-        tbdStaff.addTab("Manage Assignments", pnlManageAssignments);
+        tbdStaff.addTab("Manage Grades", jPanel1);
 
         jMenu1.setText("Menu");
 
@@ -251,12 +299,12 @@ public class StaffGUI extends javax.swing.JFrame {
             //Instanced Variables
             JTable tbl = (JTable)evt.getSource();
             Object temp = tbl.getValueAt(tbl.getSelectedRow(), 0);
-            int courseID = (int) temp;
+            courseID = (int) temp;
 
             ArrayList<ArrayList<Object>> s = db.getStudentInfoInCourse(courseID);
             int size = s.size();
             
-            if (size != 0)
+            if (size != 0)  //If there are students in the class, fill JTable
             {
                 DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
                 model.setRowCount(0); //Reset Table to 0
@@ -282,6 +330,12 @@ public class StaffGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_tblMngClassesMouseClicked
 
     
+    /**
+     * fillCourses()
+     * ------------------------------------
+     * Fills JTable based on staff position. If staff, then pull every course
+     * staff teaches, else, pull every courses since user is administrator.
+     */
     private void fillCourses()
     {
         try
@@ -313,11 +367,25 @@ public class StaffGUI extends javax.swing.JFrame {
                     int size = o.get(x).size();
 
                     model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5),o.get(x).get(6)} );
-
                 }
             }
         }
         catch (Exception e)
+        {
+                
+        }
+    }
+    
+    /**
+     * 
+     */
+    private void fillClassMaterialList()
+    {
+        try
+        {
+            
+        }
+        catch(Exception e)
         {
             
         }
@@ -363,12 +431,15 @@ public class StaffGUI extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel pnlManageAssignments;
     private javax.swing.JPanel pnlManageClasses;
     private javax.swing.JPanel pnlViewStudents;
     private javax.swing.JTabbedPane tbdStaff;
+    private javax.swing.JTable tblClassMaterial;
     private javax.swing.JTable tblMngClasses;
     private javax.swing.JTable tblStudents;
     // End of variables declaration//GEN-END:variables
