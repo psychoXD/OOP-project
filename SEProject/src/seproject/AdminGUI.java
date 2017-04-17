@@ -422,6 +422,12 @@ public class AdminGUI extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel)tblAddUser.getModel();
             model.addRow(new Object[]{null,null,null,null} );
             
+            JComboBox typeUser = new JComboBox();    //Stores JComboBox of type of User
+            typeUser.addItem(new String("Teacher"));
+            
+            TableColumn staffIDColumn = tblAddUser.getColumnModel().getColumn(2);
+            staffIDColumn.setCellEditor(new DefaultCellEditor(typeUser));
+            
         }
         else 
         {

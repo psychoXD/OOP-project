@@ -5,11 +5,16 @@
  */
 package seproject;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  *
@@ -49,6 +54,8 @@ public class Database {
         {
             System.out.println(e);
         }
+        
+        this.createDirectory();
     }
     
     /**
@@ -71,6 +78,7 @@ public class Database {
         {
             System.out.println(e);
         }
+        this.createDirectory();
     }
     
     /**
@@ -977,6 +985,114 @@ public class Database {
         {
             System.out.println("Error removing Student ID Into Course: " + e);
             return false;
+        }
+    }
+    
+    /**
+     * Uploads File selected by user and return true if everything went well, else
+     * will return false if failed to upload. 
+     * @return 
+     */
+    public boolean uploadFile(Path src, Path dir, int sectionNo, String docType, String docName)
+    {
+        try
+        {
+            
+            preparedStatement = connect.
+                    prepareStatement("DELETE FROM ClassMaterial WHERE MaterialName =? AND SectionNo =?");
+            preparedStatement.setString(1, docName);
+            preparedStatement.setInt(2, sectionNo);
+            preparedStatement.executeUpdate();
+            
+            preparedStatement = connect.
+                    prepareStatement("INSERT INTO ClassMaterial "
+                            + "(MaterialName, DocumentType, SectionNo) "
+                            + "VALUES (?,?,?) ");
+            preparedStatement.setString(1, docName);
+            preparedStatement.setString(2, docType);
+            preparedStatement.setInt(3, sectionNo);
+            preparedStatement.executeUpdate();
+            
+            File t = new File("../CourseMaterial/" + sectionNo);
+            
+            if (!(t.exists()))  //If "CourseMaterial/sectionNo" folder does not exist, then create it. (Also create Assignment Folder for course)
+            {
+                t.mkdir();
+                
+                t = new File("../CourseAssignment/"+sectionNo);
+                
+                t.mkdir();
+            }
+            
+            Files.copy(src, dir, StandardCopyOption.REPLACE_EXISTING);
+   
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error in uploading file: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * Uploads File selected by user and return true if everything went well, else
+     * will return false if failed to upload. 
+     * @return 
+     */
+    public boolean uploadFile(Path src, Path dir, int sectionNo, String docType, String docName, float gradeWeight, String dueDate)
+    {
+        
+        try
+        {
+            uploadFile(src,dir, sectionNo, docType, docName);
+            
+            
+            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+            java.util.Date date = formatter.parse(dueDate);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            
+            preparedStatement = connect.
+                    prepareStatement("INSERT INTO Assignment "
+                            + "(DocumentNo, DueDate, GradeWeight) "
+                            + "VALUES ((SELECT DocumentNo FROM ClassMaterial WHERE SectionNo =? AND MaterialName =?),?,?) ");
+            preparedStatement.setInt(1, sectionNo);
+            preparedStatement.setString(2, docName);
+            preparedStatement.setFloat(4, gradeWeight);
+            preparedStatement.setDate(3, sqlDate);
+            preparedStatement.executeUpdate();
+   
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error in uploading file: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * createDirectory
+     * Create Directory Folder for CourseMaterial and CourseAssignment if they do not exist.
+     */
+    private void createDirectory()
+    {
+        try
+        {
+            File t = new File("../CourseMaterial");
+            
+            if (!(t.exists())) //If "CourseMaterial" folder does not exist, then create it. (Also create Assignment folder)
+            {
+                t.mkdir();  //Make a folder called Courses
+                
+                t = new File("../CourseAssignment");
+                
+                t.mkdir();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
     

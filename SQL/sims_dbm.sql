@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS Class;
 DROP TABLE IF EXISTS Student_Class;
 DROP TABLE IF EXISTS Assignment;
 DROP TABLE IF EXISTS ClassMaterial;
+DROP TABLE IF EXISTS Student_Assignment;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -98,13 +99,23 @@ CREATE TABLE Assignment
         REFERENCES ClassMaterial(DocumentNo)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
+    DueDate DATE,
+    GradeWeight FLOAT,
+    PRIMARY KEY (DocumentNo)
+);
+
+CREATE TABLE Student_Assignment
+(
     UserID INT NOT NULL,
         FOREIGN KEY fk_UserID(UserID)
         REFERENCES Student(UserID)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    DueDate DATE,
-    Grade INT,
+    DocumentNo INT NOT NULL,
+        FOREIGN KEY fk_DocumentNo(DocumentNo)
+        REFERENCES ClassMaterial(DocumentNo)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    Grade FLOAT,
     PRIMARY KEY (DocumentNo, UserID)
 );
-

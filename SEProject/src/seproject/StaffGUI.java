@@ -71,6 +71,10 @@ public class StaffGUI extends javax.swing.JFrame {
         pnlManageAssignments = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblClassMaterial = new javax.swing.JTable();
+        btnUpload = new javax.swing.JButton();
+        btnModifyMaterial = new javax.swing.JButton();
+        btnRemoveMaterial = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -214,20 +218,53 @@ public class StaffGUI extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tblClassMaterial);
 
+        btnUpload.setText("Upload Material");
+        btnUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadActionPerformed(evt);
+            }
+        });
+
+        btnModifyMaterial.setText("Modify Material");
+        btnModifyMaterial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifyMaterialActionPerformed(evt);
+            }
+        });
+
+        btnRemoveMaterial.setText("Remove Material");
+
+        btnRefresh.setText("Refresh");
+
         javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
         pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
         pnlManageAssignmentsLayout.setHorizontalGroup(
             pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(326, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModifyMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(51, 51, 51))
         );
         pnlManageAssignmentsLayout.setVerticalGroup(
             pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
+                        .addComponent(btnUpload)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModifyMaterial)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemoveMaterial)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRefresh))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -329,6 +366,21 @@ public class StaffGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tblMngClassesMouseClicked
 
+    /**
+     * btnUpload ActionPerformed
+     * -------------------------------------
+     * Opens up UploadAssignmentGUI so that the staff may add material to the desired sectionNo/class.
+     * @param evt 
+     */
+    private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
+        UploadAssignmentGUI gui = new UploadAssignmentGUI(this, db, (int)tblMngClasses.getValueAt(tblMngClasses.getSelectedRow(), 0));
+        gui.setVisible(true);
+    }//GEN-LAST:event_btnUploadActionPerformed
+
+    private void btnModifyMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyMaterialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModifyMaterialActionPerformed
+
     
     /**
      * fillCourses()
@@ -336,7 +388,7 @@ public class StaffGUI extends javax.swing.JFrame {
      * Fills JTable based on staff position. If staff, then pull every course
      * staff teaches, else, pull every courses since user is administrator.
      */
-    private void fillCourses()
+    public void fillCourses()
     {
         try
         {
@@ -379,7 +431,7 @@ public class StaffGUI extends javax.swing.JFrame {
     /**
      * 
      */
-    private void fillClassMaterialList()
+    public void fillClassMaterialList()
     {
         try
         {
@@ -428,6 +480,10 @@ public class StaffGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminManage;
+    private javax.swing.JButton btnModifyMaterial;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnRemoveMaterial;
+    private javax.swing.JButton btnUpload;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
