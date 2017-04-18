@@ -6,6 +6,7 @@
 package seproject;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,6 +20,7 @@ public class StaffGUI extends javax.swing.JFrame {
     private Staff user;  //Holds User class of current User
     private Database db;    //Database db
     private int courseID;   //Holds courseID
+    boolean editable = false;
 
     /**
      * Creates new form StaffGUI
@@ -70,259 +72,316 @@ public class StaffGUI extends javax.swing.JFrame {
         tblStudents = new javax.swing.JTable();
         pnlManageAssignments = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblClassMaterial = new javax.swing.JTable();
-        btnUpload = new javax.swing.JButton();
-        btnModifyMaterial = new javax.swing.JButton();
-        btnRemoveMaterial = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        tblClassMaterial = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return editable;
+            }};
+            btnUpload = new javax.swing.JButton();
+            btnRemoveMaterial = new javax.swing.JButton();
+            btnRefresh = new javax.swing.JButton();
+            jPanel2 = new javax.swing.JPanel();
+            jScrollPane5 = new javax.swing.JScrollPane();
+            tblManageAssignments = new javax.swing.JTable();
+            btnDownload = new javax.swing.JButton();
+            btnModifyAssignment = new javax.swing.JButton();
+            btnRefreshAssignment = new javax.swing.JButton();
+            jMenuBar1 = new javax.swing.JMenuBar();
+            jMenu1 = new javax.swing.JMenu();
+            jMenuItem1 = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SIMS Staff GUI");
-        setResizable(false);
+            setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+            setTitle("SIMS Staff GUI");
+            setResizable(false);
 
-        tblMngClasses.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Section No.", "Course ID", "Room No.", "Begin Time", "End Time", "Class Days", "Staff ID"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
+            tblMngClasses.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                    {null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null},
+                    {null, null, null, null, null, null, null}
+                },
+                new String [] {
+                    "Section No.", "Course ID", "Room No.", "Begin Time", "End Time", "Class Days", "Staff ID"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false, false, false
+                };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblMngClasses.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblMngClassesMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblMngClasses);
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            tblMngClasses.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    tblMngClassesMouseClicked(evt);
+                }
+            });
+            jScrollPane1.setViewportView(tblMngClasses);
 
-        btnAdminManage.setText("Admin Only");
-        btnAdminManage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdminManageActionPerformed(evt);
-            }
-        });
+            btnAdminManage.setText("Admin Only");
+            btnAdminManage.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnAdminManageActionPerformed(evt);
+                }
+            });
 
-        javax.swing.GroupLayout pnlManageClassesLayout = new javax.swing.GroupLayout(pnlManageClasses);
-        pnlManageClasses.setLayout(pnlManageClassesLayout);
-        pnlManageClassesLayout.setHorizontalGroup(
-            pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlManageClassesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAdminManage)
-                .addContainerGap())
-            .addGroup(pnlManageClassesLayout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1048, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
-        );
-        pnlManageClassesLayout.setVerticalGroup(
-            pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlManageClassesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnAdminManage)
-                .addContainerGap())
-        );
+            javax.swing.GroupLayout pnlManageClassesLayout = new javax.swing.GroupLayout(pnlManageClasses);
+            pnlManageClasses.setLayout(pnlManageClassesLayout);
+            pnlManageClassesLayout.setHorizontalGroup(
+                pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlManageClassesLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAdminManage)
+                    .addContainerGap())
+                .addGroup(pnlManageClassesLayout.createSequentialGroup()
+                    .addGap(55, 55, 55)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1048, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(67, Short.MAX_VALUE))
+            );
+            pnlManageClassesLayout.setVerticalGroup(
+                pnlManageClassesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlManageClassesLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
+                    .addGap(18, 18, 18)
+                    .addComponent(btnAdminManage)
+                    .addContainerGap())
+            );
 
-        tbdStaff.addTab("Manage Classes", pnlManageClasses);
+            tbdStaff.addTab("Manage Classes", pnlManageClasses);
 
-        tblStudents.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            tblStudents.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-            },
-            new String [] {
-                "Student ID ", "First Name", "Last Name"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
+                },
+                new String [] {
+                    "Student ID ", "First Name", "Last Name"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false
+                };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(tblStudents);
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            jScrollPane2.setViewportView(tblStudents);
 
-        javax.swing.GroupLayout pnlViewStudentsLayout = new javax.swing.GroupLayout(pnlViewStudents);
-        pnlViewStudents.setLayout(pnlViewStudentsLayout);
-        pnlViewStudentsLayout.setHorizontalGroup(
-            pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlViewStudentsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 909, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(247, Short.MAX_VALUE))
-        );
-        pnlViewStudentsLayout.setVerticalGroup(
-            pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlViewStudentsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+            javax.swing.GroupLayout pnlViewStudentsLayout = new javax.swing.GroupLayout(pnlViewStudents);
+            pnlViewStudents.setLayout(pnlViewStudentsLayout);
+            pnlViewStudentsLayout.setHorizontalGroup(
+                pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlViewStudentsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(29, Short.MAX_VALUE))
+            );
+            pnlViewStudentsLayout.setVerticalGroup(
+                pnlViewStudentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlViewStudentsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+                    .addContainerGap())
+            );
 
-        tbdStaff.addTab("View Students", pnlViewStudents);
+            tbdStaff.addTab("View Students", pnlViewStudents);
 
-        tblClassMaterial.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            tblClassMaterial.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-            },
-            new String [] {
-                "Document No", "Document Name", "Document Type", "Due Date"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
+                },
+                new String [] {
+                    "Document No", "Document Name", "Document Type", "SectionNo", "Due Date", "Grade Weight"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Float.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false, false
+                };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(tblClassMaterial);
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            tblClassMaterial.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    tblClassMaterialMouseClicked(evt);
+                }
+            });
+            jScrollPane3.setViewportView(tblClassMaterial);
 
-        btnUpload.setText("Upload Material");
-        btnUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUploadActionPerformed(evt);
-            }
-        });
+            btnUpload.setText("Upload Material");
+            btnUpload.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnUploadActionPerformed(evt);
+                }
+            });
 
-        btnModifyMaterial.setText("Modify Material");
-        btnModifyMaterial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModifyMaterialActionPerformed(evt);
-            }
-        });
+            btnRemoveMaterial.setText("Remove Material");
+            btnRemoveMaterial.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnRemoveMaterialActionPerformed(evt);
+                }
+            });
 
-        btnRemoveMaterial.setText("Remove Material");
+            btnRefresh.setText("Refresh");
+            btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnRefreshActionPerformed(evt);
+                }
+            });
 
-        btnRefresh.setText("Refresh");
+            javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
+            pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
+            pnlManageAssignmentsLayout.setHorizontalGroup(
+                pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 962, Short.MAX_VALUE)
+                    .addGap(18, 18, 18)
+                    .addGroup(pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRemoveMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGap(51, 51, 51))
+            );
+            pnlManageAssignmentsLayout.setVerticalGroup(
+                pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
+                            .addComponent(btnUpload)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnRemoveMaterial)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnRefresh))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap(20, Short.MAX_VALUE))
+            );
 
-        javax.swing.GroupLayout pnlManageAssignmentsLayout = new javax.swing.GroupLayout(pnlManageAssignments);
-        pnlManageAssignments.setLayout(pnlManageAssignmentsLayout);
-        pnlManageAssignmentsLayout.setHorizontalGroup(
-            pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnModifyMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRemoveMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(51, 51, 51))
-        );
-        pnlManageAssignmentsLayout.setVerticalGroup(
-            pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlManageAssignmentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlManageAssignmentsLayout.createSequentialGroup()
-                        .addComponent(btnUpload)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnModifyMaterial)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRemoveMaterial)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRefresh))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
+            tbdStaff.addTab("Manage Class Material", pnlManageAssignments);
 
-        tbdStaff.addTab("Manage Class Material", pnlManageAssignments);
+            tblManageAssignments.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1168, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 618, Short.MAX_VALUE)
-        );
+                },
+                new String [] {
+                    "Document No", "Document Name", "Student ID", "Submitted File", "Grade"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Float.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, true, true
+                };
 
-        tbdStaff.addTab("Manage Grades", jPanel1);
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
 
-        jMenu1.setText("Menu");
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            jScrollPane5.setViewportView(tblManageAssignments);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Logout");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
+            btnDownload.setText("Download File");
 
-        jMenuBar1.add(jMenu1);
+            btnModifyAssignment.setText("Grade Assignment");
 
-        setJMenuBar(jMenuBar1);
+            btnRefreshAssignment.setText("Refresh");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tbdStaff)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tbdStaff)
-                .addContainerGap())
-        );
+            javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+            jPanel2.setLayout(jPanel2Layout);
+            jPanel2Layout.setHorizontalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnModifyAssignment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRefreshAssignment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap())
+            );
+            jPanel2Layout.setVerticalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(btnDownload)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnModifyAssignment)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnRefreshAssignment)
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE))
+                    .addContainerGap())
+            );
 
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+            tbdStaff.addTab("Manage Assignment", jPanel2);
 
-    private void btnAdminManageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminManageActionPerformed
-        AdminGUI gui = new AdminGUI(this,db);
-        gui.setVisible(true);
-    }//GEN-LAST:event_btnAdminManageActionPerformed
+            jMenu1.setText("Menu");
+
+            jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+            jMenuItem1.setText("Logout");
+            jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jMenuItem1ActionPerformed(evt);
+                }
+            });
+            jMenu1.add(jMenuItem1);
+
+            jMenuBar1.add(jMenu1);
+
+            setJMenuBar(jMenuBar1);
+
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(tbdStaff)
+                    .addContainerGap())
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(tbdStaff)
+                    .addContainerGap())
+            );
+
+            pack();
+            setLocationRelativeTo(null);
+        }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         this.dispose();
@@ -330,42 +389,36 @@ public class StaffGUI extends javax.swing.JFrame {
         gui.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void tblMngClassesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMngClassesMouseClicked
-        try
-        {
-            //Instanced Variables
-            JTable tbl = (JTable)evt.getSource();
-            Object temp = tbl.getValueAt(tbl.getSelectedRow(), 0);
-            courseID = (int) temp;
+    /**
+     * Refreshes the tblClassMaterials table with updated information from database.
+     * @param evt 
+     */
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        fillClassMaterialList();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
-            ArrayList<ArrayList<Object>> s = db.getStudentInfoInCourse(courseID);
-            int size = s.size();
-            
-            if (size != 0)  //If there are students in the class, fill JTable
-            {
-                DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
-                model.setRowCount(0); //Reset Table to 0
-                
-                for (int x = 0; x < size; x++)
-                {
-                    model.addRow(new Object[]{s.get(x).get(0),s.get(x).get(1),s.get(x).get(2)} );
-                }
-                
-                tbdStaff.setSelectedIndex(1);
-            }
-            else    //if empty
-            {
-                DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
-                model.setRowCount(0); //Reset Table to 0
-                tbdStaff.setSelectedIndex(1);
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println(e);
-        }
-    }//GEN-LAST:event_tblMngClassesMouseClicked
+    /**
+     * Remove the course material from the database and deletes the file.
+     * @param evt 
+     */
+    private void btnRemoveMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveMaterialActionPerformed
+        boolean b = db.removeClassMaterial((int)tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 3),(int)tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 0),(String)tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 1));
 
+        if(b == true)
+        {
+            JOptionPane.showMessageDialog(null, "Class Material Removed Successful","Class Material Removed Successful",
+                JOptionPane.DEFAULT_OPTION);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Class Material Removed Unsuccessful","Failed to remove class material.",
+                JOptionPane.ERROR_MESSAGE);
+        }
+
+        fillClassMaterialList();
+    }//GEN-LAST:event_btnRemoveMaterialActionPerformed
+
+    
     /**
      * btnUpload ActionPerformed
      * -------------------------------------
@@ -377,10 +430,64 @@ public class StaffGUI extends javax.swing.JFrame {
         gui.setVisible(true);
     }//GEN-LAST:event_btnUploadActionPerformed
 
-    private void btnModifyMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyMaterialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnModifyMaterialActionPerformed
+    private void btnAdminManageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminManageActionPerformed
+        AdminGUI gui = new AdminGUI(this,db);
+        gui.setVisible(true);
+    }//GEN-LAST:event_btnAdminManageActionPerformed
 
+    /**
+     * Fills tblStudents and tblClassMaterial with information from selected row by Staff User.
+     * @param evt 
+     */
+    private void tblMngClassesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMngClassesMouseClicked
+        try
+        {
+            //Instanced Variables
+            JTable tbl = (JTable)evt.getSource();
+            Object temp = tbl.getValueAt(tbl.getSelectedRow(), 0);
+            courseID = (int) temp;
+
+            ArrayList<ArrayList<Object>> s = db.getStudentInfoInCourse(courseID);
+            int size = s.size();
+
+            if (size != 0)  //If there are students in the class, fill JTable
+            {
+                DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
+                model.setRowCount(0); //Reset Table to 0
+
+                for (int x = 0; x < size; x++)
+                {
+                    model.addRow(new Object[]{s.get(x).get(0),s.get(x).get(1),s.get(x).get(2)} );
+                }
+
+                tbdStaff.setSelectedIndex(1);
+            }
+            else    //if empty
+            {
+                DefaultTableModel model = (DefaultTableModel)tblStudents.getModel();
+                model.setRowCount(0); //Reset Table to 0
+                tbdStaff.setSelectedIndex(1);
+            }
+
+            fillClassMaterialList();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_tblMngClassesMouseClicked
+
+    private void tblClassMaterialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClassMaterialMouseClicked
+        if ((tblClassMaterial.getSelectedColumn() == 5 || tblClassMaterial.getSelectedColumn() == 4 ))
+        {
+            editable = true;
+        }
+        else
+        {
+            editable = false;
+        }
+    }//GEN-LAST:event_tblClassMaterialMouseClicked
+    
     
     /**
      * fillCourses()
@@ -424,22 +531,34 @@ public class StaffGUI extends javax.swing.JFrame {
         }
         catch (Exception e)
         {
-                
+            e.printStackTrace();
         }
     }
     
     /**
-     * 
+     * Refreshes the tblClassMaterials table with updated information from database.
      */
     public void fillClassMaterialList()
     {
         try
         {
+            int sectionNo = (int)tblMngClasses.getValueAt(tblMngClasses.getSelectedRow(), 0);
+            ArrayList<ArrayList<Object>> o = db.getCourseMaterial(sectionNo);
+            
+            DefaultTableModel model = (DefaultTableModel)tblClassMaterial.getModel();
+            model.setRowCount(0); //Reset Table to 0
+
+            for (int x = 0; x < o.size(); x++)
+            {
+                int size = o.get(x).size();
+
+                model.addRow(new Object[]{o.get(x).get(0),o.get(x).get(1),o.get(x).get(2),o.get(x).get(3), o.get(x).get(4), o.get(x).get(5)} );
+            }
             
         }
         catch(Exception e)
         {
-            
+            e.printStackTrace();
         }
     }
     
@@ -480,22 +599,26 @@ public class StaffGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminManage;
-    private javax.swing.JButton btnModifyMaterial;
+    private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnModifyAssignment;
     private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnRefreshAssignment;
     private javax.swing.JButton btnRemoveMaterial;
     private javax.swing.JButton btnUpload;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPanel pnlManageAssignments;
     private javax.swing.JPanel pnlManageClasses;
     private javax.swing.JPanel pnlViewStudents;
     private javax.swing.JTabbedPane tbdStaff;
     private javax.swing.JTable tblClassMaterial;
+    private javax.swing.JTable tblManageAssignments;
     private javax.swing.JTable tblMngClasses;
     private javax.swing.JTable tblStudents;
     // End of variables declaration//GEN-END:variables

@@ -30,6 +30,8 @@ public class Database {
     String user;
     String password;
     String url;
+    File assignmentFolder = new File ("../CourseAssignment/");
+    File classMaterialFolder = new File ("../CourseMaterial/");
     
     
 
@@ -929,6 +931,78 @@ public class Database {
     }
     
     /**
+     * Returns the Class Materials that have been uploaded to the course based on SectionNo
+     * @param sectionNo
+     * @return 
+     */
+    
+    public ArrayList<ArrayList<Object>> getCourseMaterial(int sectionNo)
+    {
+        try
+        {
+            ArrayList<ArrayList<Object>> l = new ArrayList<ArrayList<Object>>();
+            ArrayList<Object> temp;
+            
+            preparedStatement = connect.
+                    prepareStatement("SELECT * FROM ClassMaterial WHERE SectionNo =?");
+            preparedStatement.setInt(1, sectionNo);
+            
+            resultSet = preparedStatement.executeQuery();
+            
+            while(resultSet.next())
+            {
+                temp = new ArrayList<Object>();
+                
+                int docNum = resultSet.getInt("DocumentNo");
+                String materialName = resultSet.getString("MaterialName");
+                String documentType = resultSet.getString("DocumentType");
+                int secNo = resultSet.getInt("SectionNo");
+                float grade;
+                Date date;
+                
+                temp.add(docNum);
+                temp.add(materialName);
+                temp.add(documentType);
+                temp.add(secNo);
+                
+                if (documentType.equals("Class Material"))
+                {
+                    temp.add(null);
+                    temp.add(null);
+                }
+                else
+                {
+                    ResultSet s;
+                    preparedStatement = connect.prepareStatement("SELECT GradeWeight, DueDate FROM Assignment WHERE DocumentNo =?");
+                    preparedStatement.setFloat(1, docNum);
+                    s = preparedStatement.executeQuery();
+                    
+                    if (s.next())
+                    {
+                        grade = s.getFloat("GradeWeight");
+                        date = s.getDate("DueDate");
+                        temp.add(date);
+                        temp.add(grade);
+                    }
+                    else
+                    {
+                        temp.add(null);
+                    }
+                }
+                
+                l.add(temp);
+            }
+            
+            return l;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving Course Material(s): " + e);
+            return null;
+        }
+    }
+    
+    /**
      * addStudentToCourse(int sectionNo, int studentID)
      * ------------------------------------------------------------
      * 
@@ -984,6 +1058,30 @@ public class Database {
         catch(Exception e)
         {
             System.out.println("Error removing Student ID Into Course: " + e);
+            return false;
+        }
+    }
+    
+    public boolean removeClassMaterial(int sectionNo, int documentNo, String documentName)
+    {
+        try
+        {
+            preparedStatement = connect.
+                    prepareStatement("DELETE FROM ClassMaterial WHERE SectionNo =? AND DocumentNo =?");
+            preparedStatement.setInt(1, sectionNo);
+            preparedStatement.setInt(2, documentNo);
+            preparedStatement.executeUpdate();
+            
+            File temp = new File(classMaterialFolder.getPath() + "/" + sectionNo + "/" + documentName);
+            
+            System.out.println(temp.toPath());
+            Files.deleteIfExists(temp.toPath());
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error removing Class Material from Course: " + e);
             return false;
         }
     }

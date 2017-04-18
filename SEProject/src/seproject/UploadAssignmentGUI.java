@@ -66,6 +66,11 @@ public class UploadAssignmentGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Upload Material");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("File Name:");
 
@@ -278,6 +283,14 @@ public class UploadAssignmentGUI extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
+
+    /**
+     * When window closes, it refreshed the tblClassMaterial table in the StaffGUI.
+     * @param evt 
+     */
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        gui.fillClassMaterialList();
+    }//GEN-LAST:event_formWindowClosed
     
     
     /**

@@ -116,6 +116,7 @@ CREATE TABLE Student_Assignment
         REFERENCES ClassMaterial(DocumentNo)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
+    FileName VARCHAR (60),
     Grade FLOAT,
     PRIMARY KEY (DocumentNo, UserID)
 );
