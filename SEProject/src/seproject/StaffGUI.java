@@ -583,7 +583,27 @@ public class StaffGUI extends javax.swing.JFrame {
         
             for (int x = 0; x < size; x ++)
             {
-
+                ArrayList<Object> temp = new ArrayList<Object>();
+                int documentNo = (int)tblManageAssignments.getValueAt(x, 0);
+                int studentID = (int)tblManageAssignments.getValueAt(x, 2);
+                float grade = (float)tblManageAssignments.getValueAt(x, 4);
+                
+                temp.add(documentNo);
+                temp.add(studentID);
+                temp.add(grade);
+                
+                o.add(temp);
+            }
+            
+            if (db.updateGrades(o))
+            {
+                JOptionPane.showMessageDialog(null, "Grade Update Successful","Grade Update Successful",
+                    JOptionPane.DEFAULT_OPTION);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Grade Update Unsuccessful","Failed to Update Grade.",
+                    JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnSubmitGradesActionPerformed

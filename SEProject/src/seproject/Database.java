@@ -604,6 +604,43 @@ public class Database {
     }
     
     /**
+     * 
+     * @param o
+     * @return 
+     */
+    public boolean updateGrades(ArrayList<ArrayList<Object>> o)
+    {
+        try
+        {
+            int size = o.size();
+            
+            for (int x = 0; x < size; x++ )
+            {
+                int documentNo = (int)o.get(x).get(0);
+                int studentID = (int)o.get(x).get(1);
+                float grade = (float)o.get(x).get(2);
+                
+                preparedStatement = connect.
+                        prepareStatement("UPDATE Student_Assignment "
+                                + "\nSET Grade =? "
+                                + "\nWHERE DocumentNo =? AND UserID =?");
+                preparedStatement.setFloat(1, grade);
+                preparedStatement.setInt(2, documentNo);
+                preparedStatement.setInt(3, studentID);
+                
+                preparedStatement.executeUpdate();
+            }
+            return true;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error Updating Grades: " + e);
+            return false;
+        }
+        
+    }
+    
+    /**
      * updateCourse(Object [] o)
      * ----------------------------------------
      * 
@@ -998,7 +1035,6 @@ public class Database {
      * @param sectionNo
      * @return 
      */
-    
     public ArrayList<ArrayList<Object>> getCourseMaterial(int sectionNo)
     {
         try
