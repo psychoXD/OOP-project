@@ -684,13 +684,13 @@ public class AdminGUI extends javax.swing.JFrame {
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(null, "Testing 1","Failed Adding New Row!!",
+                    JOptionPane.showMessageDialog(null, "Failed Adding New Row!!","Failed Adding New Row!!",
                                         JOptionPane.ERROR_MESSAGE);
                 }
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "Testing 2","Failed Adding New Row!!",
+                JOptionPane.showMessageDialog(null, "Failed Adding New Row!!","Failed Adding New Row!!",
                                         JOptionPane.ERROR_MESSAGE);
             }
         }

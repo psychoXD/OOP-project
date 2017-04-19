@@ -89,7 +89,7 @@ CREATE TABLE ClassMaterial
         FOREIGN KEY fk_SectionNo(SectionNo)
         REFERENCES Class(SectionNo)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE   
 );
 
 CREATE TABLE Assignment
@@ -116,7 +116,7 @@ CREATE TABLE Student_Assignment
         REFERENCES ClassMaterial(DocumentNo)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    FileName VARCHAR (60),
+    FileName VARCHAR (50),
     Grade FLOAT,
     PRIMARY KEY (DocumentNo, UserID)
 );

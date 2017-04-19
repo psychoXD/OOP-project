@@ -652,6 +652,69 @@ public class Database {
         }
     }
     
+    public boolean updateClassMaterial(ArrayList<ArrayList<Object>> obj)
+    {
+        try
+        {
+            int size = obj.size();
+            
+            for (int x = 0; x < size; x++)
+            {
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                java.util.Date date = formatter.parse((String)obj.get(x).get(1));
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                
+                preparedStatement = connect.
+                        prepareStatement("UPDATE Assignment\n"
+                                + "SET GradeWeight =?,\n"
+                                + "DueDate =?\n"
+                                + "WHERE DocumentNo =?");
+                preparedStatement.setFloat(1, (float)obj.get(x).get(2));
+                preparedStatement.setDate(2, sqlDate);
+                preparedStatement.setInt(3, (int)obj.get(x).get(0));
+                preparedStatement.executeUpdate();
+            }
+            
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error Updating Class Material: " + e);
+            return false;
+        }
+    }
+    
+    public File downloadFile(int studentID, String fileName, int documentNo)
+    {
+        try
+        {
+            File f;
+            
+            preparedStatement = connect.
+                    prepareStatement("SELECT SectionNo FROM ClassMaterial WHERE DocumentNo =?");
+            preparedStatement.setInt(1, documentNo);
+            resultSet = preparedStatement.executeQuery();
+            
+            if (resultSet.next())
+            {
+                File temp;
+                temp = new File ("../CourseAssignment/" + resultSet.getInt("SectionNo") + "/" + fileName);
+                f = temp;
+                
+                 return f;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error download file: " + e);
+            return null;
+        }
+    }
+    
     /**
      * deleteUser(int id)
      * ---------------------------------------------
@@ -1003,6 +1066,55 @@ public class Database {
     }
     
     /**
+     * 
+     * @param sectionNo
+     * @return 
+     */
+    public ArrayList<ArrayList<Object>> getCourseStudentAssignments(int sectionNo)
+    {
+        try
+        {
+            ArrayList<ArrayList<Object>> l = new ArrayList<ArrayList<Object>>();
+            ArrayList<Object> temp;
+            
+            preparedStatement = connect.
+                    prepareStatement("SELECT cm.*, sa.* "
+                            + "\nFROM ClassMaterial cm "
+                            + "\nJOIN Student_Assignment sa "
+                            + "\n ON cm.DocumentNo = sa.DocumentNo"
+                            + "\nWHERE SectionNo =? AND DocumentType <> ?");
+            preparedStatement.setInt(1, sectionNo);
+            preparedStatement.setString(2, "Class Material");
+            
+            resultSet = preparedStatement.executeQuery();
+            
+            while(resultSet.next())
+            {
+                int documentNo = resultSet.getInt("cm.DocumentNo");
+                String materialName = resultSet.getString("cm.MaterialName");
+                
+                temp = new ArrayList<Object>();
+                
+                temp.add(documentNo);
+                temp.add(materialName);
+                temp.add(resultSet.getInt("sa.UserID"));
+                temp.add(resultSet.getString("sa.FileName"));
+                temp.add(resultSet.getFloat("sa.Grade"));
+
+                l.add(temp);
+            }
+            
+            return l;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving Course Material(s): " + e);
+            return null;
+        }
+    }
+    
+    
+    /**
      * addStudentToCourse(int sectionNo, int studentID)
      * ------------------------------------------------------------
      * 
@@ -1062,6 +1174,13 @@ public class Database {
         }
     }
     
+    /**
+     * 
+     * @param sectionNo
+     * @param documentNo
+     * @param documentName
+     * @return 
+     */
     public boolean removeClassMaterial(int sectionNo, int documentNo, String documentName)
     {
         try
