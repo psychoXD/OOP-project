@@ -1,2 +1,1 @@
-These are the classes and forms I made for the student view. They should work if you drop them into the src directory of the
-project folder. I added a few methods to the database class, so remember to change the password back for the sql connection.
+These are the classes and forms I made for the student view. They should work if you drop them into the src directory of the project folder. I added a few methods to the database class, so remember to change the password back for the sql connection.
