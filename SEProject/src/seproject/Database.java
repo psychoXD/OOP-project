@@ -752,6 +752,37 @@ public class Database {
         }
     }
     
+    public File downloadMaterial(int studentID, String fileName, int documentNo)
+    {
+        try
+        {
+            File f;
+            
+            preparedStatement = connect.
+                    prepareStatement("SELECT SectionNo FROM ClassMaterial WHERE DocumentNo =?");
+            preparedStatement.setInt(1, documentNo);
+            resultSet = preparedStatement.executeQuery();
+            
+            if (resultSet.next())
+            {
+                File temp;
+                temp = new File ("../CourseMaterial/" + resultSet.getInt("SectionNo") + "/" + fileName);
+                f = temp;
+                
+                 return f;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error download file: " + e);
+            return null;
+        }
+    }
+    
     /**
      * deleteUser(int id)
      * ---------------------------------------------
@@ -989,7 +1020,7 @@ public class Database {
     }
     
     /**
-     * getStudentIDInCourse(int sectionNo)
+     * getStudentInfoInCourse(int sectionNo)
      * ---------------------------------------------------
      * 
      * @param sectionNo
@@ -1026,6 +1057,69 @@ public class Database {
         catch(Exception e)
         {
             System.out.println("Error Retrieving Student Information In Course: " + e);
+            return null;
+        }
+    }
+    
+    /**
+     * getStudentsCourses(int studentID)
+     * ---------------------------------------------------
+     * 
+     * @param sectionNo
+     * @return 
+     */
+    public ArrayList<ArrayList<Object>> getStudentsCourses(int studentID)
+    {
+        try
+        {
+            ArrayList<ArrayList<Object> >o = new ArrayList<ArrayList<Object>>();    //Holds all Courses
+            
+            int sectionNo; //Holds current course SectionNo
+            String courseID = "";    //CourseID of Course
+            String roomNo = "";   //RoomNo course is held
+            Time classBeginTime;    //Time class starts
+            Time classEndTime;    //Time class ends
+            String classDays = "";  //Day(s) class is held on
+            String staffName = "";    //Holds Staff teaching class
+            ArrayList<Object> temp;
+            
+            //Getting Courses
+            preparedStatement = connect.prepareStatement("SELECT * FROM Student s "
+                    + "INNER JOIN Student_Class sc ON s.UserID = sc.UserID "
+                    + "INNER JOIN Class c ON c.sectionNo = sc.sectionNo "
+                    + "INNER JOIN SchoolStaff t on t.UserID = c.UserID "
+                    + "WHERE s.UserID = ?");
+            preparedStatement.setInt(1, studentID);
+            resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next())
+            {
+                temp = new ArrayList<Object>();
+                
+                sectionNo = resultSet.getInt("SectionNo");
+                courseID = resultSet.getString("CourseID");
+                roomNo = resultSet.getString("RoomNo");
+                classBeginTime = resultSet.getTime("ClassBeginTime");
+                classEndTime = resultSet.getTime("ClassEndTime");
+                classDays = resultSet.getString("ClassDays");
+                staffName = resultSet.getString(14) + ", " + resultSet.getString(15);
+                
+                temp.add(sectionNo);
+                temp.add(courseID);
+                temp.add(roomNo);
+                temp.add(classBeginTime);
+                temp.add(classEndTime);
+                temp.add(classDays);
+                temp.add(staffName);
+                
+                o.add(temp); 
+            }
+            
+            return o;
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error retrieving all Courses: " + e);
             return null;
         }
     }
@@ -1237,6 +1331,43 @@ public class Database {
         catch (Exception e)
         {
             System.out.println("Error removing Class Material from Course: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * method for updating the db when turning in an assignment
+     * @return 
+     */
+    public boolean uploadAssignment(Path src, Path dir, int sectionNo, int userID, int docNo, String fileName)
+    {
+        try
+        {
+            preparedStatement = connect.prepareStatement("INSERT INTO Student_Assignment (UserID, DocumentNo, FileName) "
+                            + "VALUES (?,?,?) ");
+            preparedStatement.setInt(1, userID);
+            preparedStatement.setInt(2, docNo);
+            preparedStatement.setString(3, userID + "_" + fileName);
+            preparedStatement.executeUpdate();
+            
+            File t = new File("../CourseAssignment/" + sectionNo);
+            
+            if (!(t.exists()))  //If "CourseMaterial/sectionNo" folder does not exist, then create it. (Also create Assignment Folder for course)
+            {
+                t.mkdir();
+                
+                t = new File("../CourseAssignment/"+sectionNo);
+                
+                t.mkdir();
+            }
+            
+            Files.copy(src, dir, StandardCopyOption.REPLACE_EXISTING);
+   
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error in uploading file: " + e);
             return false;
         }
     }

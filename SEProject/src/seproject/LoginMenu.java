@@ -144,7 +144,9 @@ public class LoginMenu extends javax.swing.JFrame {
             }
             else //else, User is a Student
             {
-                
+                StudentGUI gui = new StudentGUI(user,db);
+                gui.setVisible(true);
+                this.dispose();
             }
         }
         else
