@@ -411,7 +411,7 @@ public class AdminModifyCourse extends javax.swing.JFrame {
             if (db.addStudentToCourse(sectionNo, studentID))    //Success
             {
                 JOptionPane.showMessageDialog(null, "Update was successful.","Student added to course",
-                                        JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.DEFAULT_OPTION);
                 fillStudentNotInClass();
                 fillStudentInClass();
             }
