@@ -133,6 +133,7 @@ public class SubmitGUI extends javax.swing.JDialog {
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         try
         {
+            System.out.println(docNo);
             if(db.uploadAssignment(upload.toPath(),
                 new File("../CourseAssignment/"+sectionNo+"/"+student.getId()+"_"+txtFileName.getText()).toPath(),
                 sectionNo, student.getId() ,docNo, upload.getName()))

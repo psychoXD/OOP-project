@@ -1,0 +1,87 @@
+# connect : Connection
+# preparedStatement : PreparedStatement
+# statement : Statement
+# resultSet : ResultSet
+# user : String
+# password : String
+# url : String
+# assignmentFolder : File
+# classMaterialFolder : File
+
++ Database()
++ Database(String url, String user, String password)
++ checkLogin (String uName, char [] pwd) : return boolean
++ getLoginInfo(String uName) : return User
++ changeUserPwd(String username, char [] pwd) : void
++ createUser(int size, Object[] o) : return boolean
++ createNewCourse(Object [] o) : return boolean
++ getAllProfessorID() : return ArrayList<Integer>
++ getAllUserInfo() : ArrayList<ArrayList<Object>>
++ updateUserInfo(Object [] o) : return boolean
++ updateGrades(ArrayList<ArrayList<Object>> o) : return boolean
++ updateCourseInfo(Object [] o) : return boolean
++ updateClassMaterial(ArrayList<ArrayList<Object>> obj) : return boolean
++ downloadFile(int studentID, String fileName, int documentNo) : return File
++ downloadMaterial(int studentID, String fileName, int documentNo) : return File
++ deleteUser(int id) : return boolean
++ deleteCourse(int id) : return boolean
++ getAllCourses() : return ArrayList<ArrayList<Object>>
++ getCourseTaughtByTeacher(int id) : return ArrayList<ArrayList<Object>>
++ getStudentIDNotInCourse(int sectionNo) : return ArrayList<Integer>
++ getStudentIDInCourse(int sectionNo) : return ArrayList<Integer>
++ getStudentInfoInCourse(int sectionNo) : return ArrayList<ArrayList<Object>>
++ getStudentsCourses(int studentID) : return ArrayList<ArrayList<Object>>
++ getCourseMaterial(int sectionNo) : return ArrayList<ArrayList<Object>>
++ getCourseStudentAssignments(int sectionNo) : return ArrayList<ArrayList<Object>>
++ addStudentToCourse(int sectionNo , int studentID) : return boolean
++ removeStudentFromCourse(int sectionNo , int studentID) : return boolean
++ removeClassMaterial(int sectionNo, int documentNo, String documentName) : return boolean
++ uploadAssignment(Path src, Path dir, int sectionNo, int userID, int docNo, String fileName) : return boolean
++ uploadFile(Path src, Path dir, int sectionNo, String docType, String docName) : return boolean
++ uploadFile(Path src, Path dir, int sectionNo, String docType, String docName, float gradeWeight, String dueDate) : return boolean
+- createDirectory() : void
+- createUsername (String s) : return String
+- getSalt(String uName) : return byte[]
+- createAdmin() : void
+
+-------------------------------------------
+PasswordHashing Class
+-------------------------------------------
++ PasswordHashing()
++ getHash(char [] pwd, byte [] salt) : return String
++ getHash(String pwd, byte [] salt) : return String
++ createSalt() : return byte[]
+
+-------------------------------------------
+User Class
+-------------------------------------------
+- firstName : String
+- lastName : String
+- username : String
+- password : String
+- id : int
+
++ User(String username, String password, String firstName, String lastName, int id)
++ getUsername() : return String
++ getPassword() : return String
++ getFirstName() : return String
++ getLastName() : return String
++ getId() : return int
+
+-------------------------------------------
+Staff Class
+-------------------------------------------
+- position : String
+- department : String
+
++ Staff(String username, String password, String firstName, String lastName, int id, String position, String department)
++ getPosition() : return String
++ getDepartment() : return String
+
+-------------------------------------------
+Student Class
+-------------------------------------------
+- gpa : double
+
++ Student(String username, String password, String firstName, String lastName, int id)
++ getGpa() : return double

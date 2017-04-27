@@ -452,7 +452,7 @@ public class StudentGUI extends javax.swing.JFrame {
         {
             SubmitGUI gui = new SubmitGUI((JFrame) SwingUtilities.getWindowAncestor(this), false, 
                     (User) user, (int)tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 0),
-                    (int)tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 0), db, (String)
+                    (int)tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 3), db, (String)
                     tblClassMaterial.getValueAt(tblClassMaterial.getSelectedRow(), 1));
             gui.setVisible(true);
         }
