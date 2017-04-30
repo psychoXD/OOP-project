@@ -18,7 +18,7 @@ That account's login information is the following:
 	<br />Username: "Admin
 	<br />Password (case-sensitive): "Admin"
 
-<<br />When Admin creates account, the default password of every account is the following format:
+<br />When Admin creates account, the default password of every account is the following format:
 	<br />Username: <LastName><1st_initial_first_name><number>
 	<br />Password (case-sensitive): <FirstName><LastName>
 
