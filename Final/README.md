@@ -13,16 +13,16 @@ where "xxxx" is the name of the database.
 	
 
 ##Notes on Program
-If the database information would or is empty, then the first attempt to login (which will fail) will result in the creation of an admin account.<br />
+<br />If the database information would or is empty, then the first attempt to login (which will fail) will result in the creation of an admin account.<br />
 That account's login information is the following:
 	<br />Username: "Admin
-	Password (case-sensitive): "Admin"
-When Admin creates account, the default password of every account is the following format:
-	Username: <LastName><1st_initial_first_name><number>
-	Password (case-sensitive): <FirstName><LastName>
-An example being the name "John Smith" with their only being one instance of "SmithJ" in the database:
-	Username: SmithJ1
-	Password (case-sensitive): JohnSmith
+	<br />Password (case-sensitive): "Admin"
+<br />When Admin creates account, the default password of every account is the following format:
+	<br />Username: <LastName><1st_initial_first_name><number>
+	<br />Password (case-sensitive): <FirstName><LastName>
+<br />An example being the name "John Smith" with their only being one instance of "SmithJ" in the database:
+	<br />Username: SmithJ1
+	<br />Password (case-sensitive): JohnSmith
 
 
 ##Running the program (Netbeans)
