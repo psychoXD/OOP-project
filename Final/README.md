@@ -12,9 +12,9 @@ where "xxxx" is the name of the database.
 	
 
 ##Notes on Program
-If the database information would or is empty, then the first attempt to login (which will fail) will result in the creation of an admin account.
+If the database information would or is empty, then the first attempt to login (which will fail) will result in the creation of an admin account.<br />
 That account's login information is the following:
-	Username: "Admin
+	<br />Username: "Admin
 	Password (case-sensitive): "Admin"
 When Admin creates account, the default password of every account is the following format:
 	Username: <LastName><1st_initial_first_name><number>
