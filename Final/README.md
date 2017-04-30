@@ -18,11 +18,11 @@ That account's login information is the following:
 	<br />Username: "Admin
 	<br />Password (case-sensitive): "Admin"
 
-<br /><br />When Admin creates account, the default password of every account is the following format:
+<<br />When Admin creates account, the default password of every account is the following format:
 	<br />Username: <LastName><1st_initial_first_name><number>
 	<br />Password (case-sensitive): <FirstName><LastName>
 
-<br /><br />An example being the name "John Smith" with their only being one instance of "SmithJ" in the database:
+<br />An example being the name "John Smith" with their only being one instance of "SmithJ" in the database:
 	<br />Username: SmithJ1
 	<br />Password (case-sensitive): JohnSmith
 
