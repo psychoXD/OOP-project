@@ -1,13 +1,14 @@
 ##Introdcution to Software Engineering CS 4318 Project 
 
 ##Contents of the Folder
+<br />
 Data.sql (MySQLdump of the Database)
-sims_dbm.sql (Schema of the database)
-SEProject folder (Content of the Software Engineering SIMS Project)
-README.md (this file)
+<br />sims_dbm.sql (Schema of the database)
+<br />SEProject folder (Content of the Software Engineering SIMS Project)
+<br />README.md (this file)
 
 ##Setup
-Prior to this, ensure that there is a database in MySQL named "sims_dbm". If not, then change the Database.java Default Constructor url assignment to "jdbc:mysql://localhost/xxxx"
+<br />Prior to this, ensure that there is a database in MySQL named "sims_dbm". If not, then change the Database.java Default Constructor url assignment to "jdbc:mysql://localhost/xxxx"
 where "xxxx" is the name of the database.
 	
 
